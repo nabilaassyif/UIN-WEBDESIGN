@@ -1,26 +1,78 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Palet Warna Kalimantan */
+  --color-background: #131313;
+  --color-on-background: #e5e2e1;
+  --color-primary: #ffffff;
+  --color-secondary: #ffb59f;
+  --color-surface-variant: #353535;
+  --color-on-surface-variant: #c8c7be;
+  --color-secondary-container: #733521;
+  --color-on-secondary-container: #f69f85;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-container: #20201f;
+  
+  /* Spacing Khusus */
+  --spacing-margin-mobile: 20px;
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 80px;
+  --spacing-section-gap: 160px;
+  --spacing-container-max: 1440px;
+
+  /* Konfigurasi Font Family (Menyambung ke layout.tsx) */
+  --font-body-lg: var(--font-inter);
+  --font-display-lg-mobile: var(--font-playfair);
+  --font-headline-md: var(--font-playfair);
+  --font-headline-lg: var(--font-playfair);
+  --font-label-caps: var(--font-inter);
+  --font-display-lg: var(--font-playfair);
+  --font-headline-lg-mobile: var(--font-playfair);
+  --font-body-md: var(--font-inter);
+
+  /* Konfigurasi Ukuran Teks (Size & Line Height) */
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 32px;
+  --text-display-lg-mobile: 48px;
+  --text-display-lg-mobile--line-height: 54px;
+  --text-display-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-md: 32px;
+  --text-headline-md--line-height: 42px;
+  --text-headline-lg: 48px;
+  --text-headline-lg--line-height: 56px;
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 16px;
+  --text-label-caps--letter-spacing: 0.15em;
+  --text-display-lg: 84px;
+  --text-display-lg--line-height: 92px;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-headline-lg-mobile: 32px;
+  --text-headline-lg-mobile--line-height: 40px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 28px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    -webkit-font-smoothing: antialiased;
   }
-}
+  
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Efek Noise Overlay dari HTML asli */
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 }
