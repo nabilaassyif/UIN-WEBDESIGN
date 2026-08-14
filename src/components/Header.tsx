@@ -9,75 +9,119 @@ interface HeaderProps {
 
 export default function Header({ onMobileMenuClick }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('beranda');
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 30);
     };
 
+    const observerOptions = {
+      root: null,
+      rootMargin: '-40% 0px -60% 0px',
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    const navLinksIds = ['beranda', 'tentang-kami', 'program', 'dokumentasi', 'kontak'];
+    navLinksIds.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const navLinks = [
-    { href: '#beranda', label: 'Beranda' },
-    { href: '#tentang-kami', label: 'Tentang Kami' },
-    { href: '#program', label: 'Program' },
-    { href: '#dokumentasi', label: 'Dokumentasi' },
-    { href: '#kontak', label: 'Kontak' },
+    { href: '#beranda', label: 'Beranda', id: 'beranda' },
+    { href: '#tentang-kami', label: 'Tentang Kami', id: 'tentang-kami' },
+    { href: '#program', label: 'Program', id: 'program' },
+    { href: '#dokumentasi', label: 'Dokumentasi', id: 'dokumentasi' },
+    { href: '#kontak', label: 'Kontak', id: 'kontak' },
   ];
 
   return (
     <header
-      className={`fixed w-full top-0 left-0 z-50 transition-all duration-500 ease-in-out border-b ${
+      className={`fixed w-full top-0 left-0 z-50 transition-all duration-700 ease-in-out ${
         isScrolled
-          ? 'bg-background/95 backdrop-blur-lg border-white/5'
-          : 'bg-background/80 backdrop-blur-md border-white/10'
+          ? 'bg-black/95 backdrop-blur-md border-b border-white/10 py-4 shadow-sm'
+          : 'bg-black border-b border-white/5 py-6'
       }`}
       id="mainNav"
     >
-      <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-6 w-full max-w-container-max mx-auto">
-        {/* Brand */}
+      {/* Container diubah: Menghapus max-w dan memperlebar padding (px-8 md:px-16 lg:px-24) agar elemen terdorong ke pinggir */}
+      <div className="flex justify-between items-center px-8 md:px-16 lg:px-24 w-full mx-auto">
+        
+        {/* Brand / Logo - Classic Look (Putih) */}
         <Link
           href="#beranda"
-          className="font-display-lg text-headline-md tracking-tighter text-primary hover:opacity-80 transition-opacity"
+          className="group flex items-center"
         >
-          KALIMANTAN
+          <span className="font-serif text-2xl tracking-[0.2em] text-white uppercase">
+            Kalimantan
+          </span>
         </Link>
 
-        {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex gap-gutter items-center">
-          {navLinks.map((link, idx) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`font-label-caps text-label-caps transition-all duration-300 hover:text-primary ${
-                idx === 0
-                  ? 'text-primary border-b border-primary pb-1'
-                  : 'text-on-surface-variant'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        {/* Navigation Links (Desktop) - Modern Typography (Putih/Abu-abu) */}
+        <nav className="hidden md:flex gap-10 items-center">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="relative group py-2"
+              >
+                <span 
+                  className={`text-[12px] font-semibold tracking-[0.15em] uppercase transition-colors duration-300 ${
+                    isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
+                  }`}
+                >
+                  {link.label}
+                </span>
+                
+                {/* Thin Elegant Classic Underline (Putih) */}
+                <span 
+                  className={`absolute bottom-0 left-0 h-[1px] bg-white transition-all duration-500 ease-out ${
+                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Trailing Action */}
-        <Link
-          href="#karya-pilihan"
-          className="hidden md:inline-flex items-center justify-center px-6 py-3 border border-white/10 text-primary font-label-caps text-label-caps hover:bg-white/5 transition-colors duration-300"
-        >
-          Jelajahi Karya
-        </Link>
+        {/* Trailing Action - Classic Outline Button (Hitam Putih) */}
+        <div className="flex items-center gap-4">
+          <Link
+            href="#karya-pilihan"
+            className="hidden md:inline-flex items-center justify-center px-7 py-2.5 border border-white bg-transparent text-[12px] font-semibold tracking-[0.1em] uppercase text-white transition-all duration-500 hover:bg-white hover:text-black"
+          >
+            Jelajahi Karya
+          </Link>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          aria-label="Menu"
-          className="md:hidden text-primary p-2"
-          onClick={onMobileMenuClick}
-        >
-          <span className="material-symbols-outlined">menu</span>
-        </button>
+          {/* Mobile Menu Button - Minimalist Classic Lines (Putih) */}
+          <button
+            aria-label="Toggle Menu"
+            className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 focus:outline-none"
+            onClick={onMobileMenuClick}
+          >
+            <span className="w-6 h-[1px] bg-white block transition-all"></span>
+            <span className="w-6 h-[1px] bg-white block transition-all"></span>
+            <span className="w-6 h-[1px] bg-white block transition-all"></span>
+          </button>
+        </div>
       </div>
     </header>
   );

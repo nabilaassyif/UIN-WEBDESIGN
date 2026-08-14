@@ -59,11 +59,11 @@ export default function AccessibilityPanel({
   if (!isOpen) return null;
 
   return (
-    <div
-      aria-label="Accessibility Settings"
-      className="absolute bottom-20 right-0 w-[90vw] sm:w-[400px] max-h-[80vh] overflow-y-auto bg-surface-container-highest border border-white/10 rounded-xl shadow-2xl p-6"
-      role="dialog"
-    >
+<div
+  aria-label="Accessibility Settings"
+  className="absolute bottom-20 right-0 w-[calc(100vw-2rem)] sm:w-[400px] max-h-[75vh] overflow-y-auto bg-surface-container-highest border border-white/10 rounded-xl shadow-2xl p-4 sm:p-6 z-50"
+  role="dialog"
+>
       {/* Header */}
       <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/5">
         <h3 className="font-headline-md text-lg text-primary m-0">Accessibility</h3>

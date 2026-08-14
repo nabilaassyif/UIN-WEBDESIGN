@@ -29,11 +29,11 @@ export default function AccessibilityWidget() {
   }, [readingGuide]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end">
-      <AccessibilityPanel isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <div className="mt-4">
-        <AccessibilityButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-      </div>
-    </div>
+<div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end">
+  <AccessibilityPanel isOpen={isOpen} onClose={() => setIsOpen(false)} />
+  <div className="mt-3">
+    <AccessibilityButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+  </div>
+</div>
   );
 }

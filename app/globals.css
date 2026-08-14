@@ -76,3 +76,91 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 }
+/* ========================================== */
+/* ATURAN UTAMA FITUR AKSESIBILITAS           */
+/* ========================================== */
+
+/* 1. Ukuran Teks (Text Size) */
+body.access-text-sm {
+  font-size: 14px !important;
+}
+body.access-text-lg {
+  font-size: 20px !important;
+}
+
+/* 2. Spasi Baris (Line Height) */
+body.access-line-height-relaxed p,
+body.access-line-height-relaxed span,
+body.access-line-height-relaxed a {
+  line-height: 1.8 !important;
+}
+body.access-line-height-extra p,
+body.access-line-height-extra span,
+body.access-line-height-extra a {
+  line-height: 2.2 !important;
+}
+
+/* 3. Spasi Huruf (Letter Spacing) */
+body.access-spacing-wide * {
+  letter-spacing: 0.05em !important;
+}
+body.access-spacing-extra * {
+  letter-spacing: 0.1em !important;
+}
+
+/* 4. High Contrast (Kontras Tinggi) */
+body.access-high-contrast {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+}
+body.access-high-contrast * {
+  border-color: #ffff00 !important;
+}
+
+/* 5. Grayscale (Hitam Putih) */
+body.access-grayscale {
+  filter: grayscale(100%) !important;
+}
+
+/* 6. Dyslexia Friendly (Ramah Disleksia) */
+body.access-dyslexia * {
+  font-family: Arial, Helvetica, sans-serif !important;
+  word-spacing: 0.2em !important;
+}
+
+/* 7. Reduce Motion (Kurangi Gerakan) */
+body.access-reduce-motion *, 
+body.access-reduce-motion *::before, 
+body.access-reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* 8. Highlight Links (Sorot Tautan) */
+body.access-highlight-links a {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+  text-decoration: underline !important;
+  font-weight: bold !important;
+}
+
+/* 9. Enhanced Focus (Fokus Diperjelas) */
+body.access-focus *:focus {
+  outline: 4px solid #ffb59f !important;
+  outline-offset: 2px !important;
+}
+
+/* 10. Cursor Besar (Large Cursor) */
+body.access-cursor-large,
+body.access-cursor-large * {
+  cursor: zoom-in !important;
+}
+/* 1. Ukuran Teks Responsif */
+body.access-text-sm {
+  font-size: 90% !important;
+}
+body.access-text-lg {
+  font-size: 115% !important;
+}
