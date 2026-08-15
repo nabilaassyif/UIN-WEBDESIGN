@@ -11,7 +11,6 @@ export default function HeroSection() {
       className="relative min-h-screen flex items-center justify-center pt-28 pb-20 px-6 sm:px-10 lg:px-16 overflow-hidden bg-[var(--bg-primary)]"
       id="beranda"
     >
-      {/* Background Image with Cinematic Dark Gradient */}
       <div className="absolute inset-0 z-0">
         <div
           aria-hidden="true"
@@ -20,30 +19,24 @@ export default function HeroSection() {
             backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuDgottfiz9I38_XqhHUmRyD0fnQiFn7BIQslBm5AlOq9gQgQgP6_16nKcI9ao3FOXuoPTrUer6giUibJuMZPS42xo0RxnmWx1fE-_QziptRTQsy8HC3m79Qk2tsB2svjtYG5gz0o4N4NPccdFVraNrD2SrRHpc0ykzfvpJXj8nCHeEDAeJWsHJpcI7LLxlLLYYqSf2dlFDHsqLcZSmY0F57zMFdolKxcC_FhVF2A92rT8u5UHFuNpKP')`,
           }}
         />
-        {/* Multilayer Gradients for Perfect Legibility (theme-aware scrim) */}
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/70 to-[var(--bg-primary)]/40" />
         <div className="absolute inset-0 bg-radial from-transparent via-[var(--bg-primary)]/60 to-[var(--bg-primary)]" />
       </div>
 
-      {/* Hero Content */}
       <div className="relative z-10 w-full max-w-[1000px] mx-auto flex flex-col items-center text-center">
-        {/* Eyebrow */}
         <span className="text-[11px] sm:text-xs font-semibold tracking-[0.35em] text-[var(--accent)] mb-6 block uppercase">
           {t('hero.eyebrow')}
         </span>
 
-        {/* Headline */}
         <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-normal text-[var(--text-primary)] max-w-4xl mb-8 leading-[1.08] tracking-tight">
           {t('hero.titleLine1')} <br className="hidden sm:block" />
           {t('hero.titleLine2')}
         </h1>
 
-        {/* Description */}
         <p className="font-sans text-sm sm:text-base md:text-[17px] text-[var(--text-secondary)] max-w-2xl mb-12 leading-relaxed font-light">
           {t('hero.description')}
         </p>
 
-        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full sm:w-auto">
           <Link
             href="#tentang-kami"

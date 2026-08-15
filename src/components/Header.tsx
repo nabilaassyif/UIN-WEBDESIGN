@@ -20,9 +20,6 @@ const NAV_LINKS: NavLinkItem[] = [
   { href: '#kontak', id: 'kontak', labelKey: 'nav.kontak' },
 ];
 
-/**
- * ThemeToggle — compact pill switch with a single sliding thumb icon.
- */
 function ThemeToggle({ className = '' }: { className?: string }) {
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
@@ -31,8 +28,7 @@ function ThemeToggle({ className = '' }: { className?: string }) {
 
   useEffect(() => {
     hydrate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hydrate]);
 
   const isLight = theme === 'light';
 
@@ -158,7 +154,6 @@ export default function Header() {
         id="mainNav"
       >
         <div className="max-w-[1360px] mx-auto flex justify-between items-center px-6 sm:px-10 lg:px-16 w-full">
-          {/* Logo */}
           <Link
             href="#beranda"
             className="group flex items-center focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
@@ -169,7 +164,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex gap-8 lg:gap-10 items-center" aria-label={t('nav.menuLabel')}>
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.id;
@@ -189,7 +183,6 @@ export default function Header() {
                     {t(link.labelKey)}
                   </span>
 
-                  {/* Underline Indicator */}
                   <span
                     className={`absolute bottom-0 left-0 h-[1.5px] bg-[var(--text-primary)] transition-all duration-300 ease-out ${
                       isActive ? 'w-full' : 'w-0 group-hover:w-full'
@@ -200,16 +193,12 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Desktop CTA + Theme/Language */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2">
               <ThemeToggle />
               <LanguageSwitcher />
             </div>
 
-
-
-            {/* Mobile Hamburger Button */}
             <button
               aria-controls="mobile-navigation-drawer"
               aria-expanded={mobileMenuOpen}
@@ -238,7 +227,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div
           id="mobile-navigation-drawer"
@@ -280,7 +268,6 @@ export default function Header() {
           </div>
 
           <div className="pt-6 border-t border-[var(--border-color)] flex flex-col gap-3">
-
             <p className="text-center text-[10px] text-[var(--text-muted)]">
               © 2024 Kalimantan Cultural Organization
             </p>

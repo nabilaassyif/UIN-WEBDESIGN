@@ -113,7 +113,6 @@ export default function ProgramsSection() {
     >
       <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 pb-10 border-b border-[var(--border-color)]">
           <div>
             <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
@@ -128,7 +127,6 @@ export default function ProgramsSection() {
           </p>
         </div>
 
-        {/* Program List */}
         <div className="grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-[var(--border-color)]">
           {PROGRAMS_DATA.map((prog, idx) => (
             <div
@@ -137,7 +135,6 @@ export default function ProgramsSection() {
                 idx < PROGRAMS_DATA.length - 1 ? 'md:pr-8' : ''
               } ${idx > 0 ? 'pt-10 md:pt-0' : ''}`}
             >
-              {/* Image */}
               <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-secondary)] mb-5">
                 <div
                   className="w-full h-full bg-cover bg-center group-hover:scale-[1.03] transition-transform duration-700 filter brightness-[0.92] group-hover:brightness-100"
@@ -145,7 +142,6 @@ export default function ProgramsSection() {
                 />
               </div>
 
-              {/* Content */}
               <div className="flex flex-col flex-1">
                 <span className="text-[10px] uppercase font-medium tracking-widest text-[var(--accent)] mb-2 block">
                   {prog.category}
@@ -180,7 +176,6 @@ export default function ProgramsSection() {
         </div>
       </div>
 
-      {/* Modal RSVP */}
       {selectedProgram && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-sm animate-fade-in"

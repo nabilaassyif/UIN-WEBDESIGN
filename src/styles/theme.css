@@ -1,29 +1,3 @@
-/*
-  Theme variables for dark / soft-light mode.
-  Import this file once from src/app/globals.css, e.g.:
-    @import "../styles/theme.css";
-  (add it BEFORE your existing Tailwind base rules so utilities can override if needed)
-
-  How it works:
-  - Default (no attribute) and [data-theme="dark"] use the original dark palette.
-  - [data-theme="light"] swaps in a soft, warm cream palette.
-  - <html data-theme="dark|light"> is toggled by src/lib/themeStore.ts.
-
-  Components should reference these variables instead of hardcoded hex values, e.g.
-    bg-[#0B0B0B]      -> bg-[var(--bg-primary)]
-    text-[#F5F2ED]    -> text-[var(--text-primary)]
-    text-[#B5B1AC]    -> text-[var(--text-secondary)]
-    text-[#85817D]    -> text-[var(--text-muted)]
-    text-[#FFB39F]    -> text-[var(--accent)]
-    bg-[#FFB39F]      -> bg-[var(--accent)]
-    bg-[#121212]      -> bg-[var(--bg-secondary)]
-    bg-[#141414] / #161616 -> bg-[var(--bg-tertiary)]
-    bg-[#101010]      -> bg-[var(--bg-input)]
-    border-white/10   -> border-[var(--border-color)]
-    border-white/15, /20, /25 -> border-[var(--border-color-strong)]
-    "text on accent" (was text-[#0B0B0B] on a cream/accent button) -> text-[var(--accent-contrast)]
-*/
-
 :root,
 [data-theme='dark'] {
   --bg-primary: #0b0b0b;
@@ -52,7 +26,6 @@
 }
 
 [data-theme='light'] {
-  /* Soft, warm cream light mode — gentle contrast, not stark white */
   --bg-primary: #faf5ec;
   --bg-secondary: #f2ebdd;
   --bg-tertiary: #ede4d2;
@@ -78,7 +51,6 @@
   color-scheme: light;
 }
 
-/* High Contrast Override */
 html.access-high-contrast,
 body.access-high-contrast,
 .access-high-contrast {
@@ -107,8 +79,6 @@ body.access-high-contrast,
   color-scheme: dark !important;
 }
 
-
-/* Smooth, non-jarring transition when the theme changes */
 html,
 body,
 header,

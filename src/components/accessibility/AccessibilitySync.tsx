@@ -1,4 +1,3 @@
-// src/components/accessibility/AccessibilitySync.tsx
 'use client';
 
 import { useEffect } from 'react';
@@ -29,12 +28,10 @@ export default function AccessibilitySync() {
     const root = document.documentElement;
     const body = document.body;
 
-    // Set data attributes untuk styling global pada html
     root.setAttribute('data-text-size', store.textSize);
     root.setAttribute('data-line-height', store.lineHeight);
     root.setAttribute('data-letter-spacing', store.letterSpacing);
 
-    // Sync classes to both body and root
     ALL_ACCESS_CLASSES.forEach((cls) => {
       body.classList.remove(cls);
       root.classList.remove(cls);

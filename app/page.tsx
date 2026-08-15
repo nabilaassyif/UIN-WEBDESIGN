@@ -11,10 +11,8 @@ import ScrollFadeSection from "../src/components/ScrollFadeSection";
 export default function Home() {
   return (
     <>
-      {/* Header Sticky Navigation */}
       <Header />
 
-      {/* Main Content Sections */}
       <main className="flex flex-col min-h-screen w-full bg-[var(--bg-primary)]">
         <ScrollFadeSection>
           <Hero />
@@ -41,7 +39,6 @@ export default function Home() {
         </ScrollFadeSection>
       </main>
 
-      {/* Footer */}
       <ScrollFadeSection>
         <Footer />
       </ScrollFadeSection>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AccessibilityWidget from "../src/components/accessibility/AccessibilityWidget";
-import AccessibilitySync from "../src/components/accessibility/AccessibilitySync"; // <-- Impor di sini
+import AccessibilitySync from "../src/components/accessibility/AccessibilitySync";
 import { LanguageProvider } from "../src/lib/i18n/LanguageContext";
 
 export const metadata: Metadata = {
@@ -36,7 +36,6 @@ export default function RootLayout({
           }}
         />
         <LanguageProvider>
-          {/* Sinkronisasi state aksesibilitas secara global */}
           <AccessibilitySync />
 
           <div className="noise-overlay" aria-hidden="true" />

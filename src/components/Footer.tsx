@@ -21,7 +21,6 @@ export default function Footer() {
       id="kontak-footer"
     >
       <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-12 pb-16">
-        {/* Brand & Description (Col 1-5) */}
         <div className="lg:col-span-5 max-w-sm">
           <Link
             href="#beranda"
@@ -34,7 +33,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Navigation Links (Col 6-8) */}
         <div className="lg:col-span-3">
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-primary)] mb-4">
             {t('footer.navTitle')}
@@ -53,7 +51,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Contact Info (Col 9-12) */}
         <div className="lg:col-span-4">
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-primary)] mb-4">
             {t('footer.contactTitle')}
@@ -76,7 +73,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="max-w-[1360px] mx-auto pt-8 border-t border-[var(--border-color)] flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-[var(--text-muted)] font-light">
         <p>{t('footer.copyright')}</p>
         <div className="flex items-center gap-4">

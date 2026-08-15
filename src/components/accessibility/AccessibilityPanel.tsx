@@ -12,11 +12,10 @@ interface AccessibilityPanelProps {
   onClose: () => void;
 }
 
-// Each section gets one glyph + one job — icons carry meaning here, not decoration.
 const SECTIONS = {
   typography: 'text_fields',
   contrast: 'contrast',
-  motion: 'motion_photos_off',
+  motion: 'navigation',
 } as const;
 
 function SectionHeading({ icon, label }: { icon: string; label: string }) {
@@ -80,15 +79,8 @@ export default function AccessibilityPanel({
       className="fixed z-[9995] bottom-[80px] left-3 right-3 sm:left-auto sm:right-6 sm:bottom-[90px] sm:w-[380px] max-h-[76vh] overflow-y-auto overscroll-contain bg-[var(--bg-elevated)] border border-[var(--border-color-strong)] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] animate-fade-in"
       id="accessibility-panel"
       role="dialog"
-      // Belt-and-suspenders against the grayscale filter's fixed-position bug:
-      // filter/transform on an ancestor creates a new containing block for
-      // position:fixed descendants. Rendering via portal escapes any wrapper
-      // that isn't <html>/<body> itself. If your grayscale toggle applies
-      // filter to <html> or <body> directly, move it to an inner wrapper
-      // (e.g. #app-content) instead — that's the real fix.
       style={{ isolation: 'isolate' }}
     >
-      {/* Header */}
       <div className="sticky top-0 z-10 flex justify-between items-center gap-3 px-4 pt-4 pb-3 bg-[var(--bg-elevated)] border-b border-[var(--border-color)]">
         <div className="flex items-center gap-2.5">
           <span className="w-8 h-8 shrink-0 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center">
@@ -115,7 +107,6 @@ export default function AccessibilityPanel({
       </div>
 
       <div className="px-4 pb-4 pt-3.5 space-y-4">
-        {/* TIPOGRAFI & SPASI */}
         <div>
           <SectionHeading icon={SECTIONS.typography} label={t('access.sectionTypography')} />
           <div className="space-y-2">
@@ -156,7 +147,6 @@ export default function AccessibilityPanel({
 
         <div className="h-px bg-[var(--border-color)]" />
 
-        {/* KONTRAS & WARNA */}
         <div>
           <SectionHeading icon={SECTIONS.contrast} label={t('access.sectionContrast')} />
           <div className="space-y-1.5">
@@ -183,7 +173,6 @@ export default function AccessibilityPanel({
 
         <div className="h-px bg-[var(--border-color)]" />
 
-        {/* NAVIGASI & ALAT BANTU */}
         <div>
           <SectionHeading icon={SECTIONS.motion} label={t('access.sectionMotion')} />
           <div className="space-y-1.5">
@@ -209,7 +198,6 @@ export default function AccessibilityPanel({
         </div>
       </div>
 
-      {/* Footer Reset */}
       <div className="sticky bottom-0 px-4 pt-3 pb-4 bg-[var(--bg-elevated)] border-t border-[var(--border-color)]">
         <button
           className="group w-full py-2 text-[var(--text-muted)] hover:text-[var(--accent)] text-[11px] font-medium tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
@@ -225,8 +213,5 @@ export default function AccessibilityPanel({
     </div>
   );
 
-  // Portal to document.body: escapes any filtered/transformed wrapper that
-  // isn't <html>/<body> itself. See note above if grayscale filter is on
-  // <html>/<body> directly — that needs fixing at the source, not here.
   return typeof document !== 'undefined' ? createPortal(panel, document.body) : panel;
 }

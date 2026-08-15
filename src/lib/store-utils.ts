@@ -2,15 +2,6 @@
 
 import { useSyncExternalStore } from 'react';
 
-/**
- * Minimal zustand-style store factory so the app doesn't need an extra
- * dependency just for the accessibility/theme widgets.
- *
- * Usage:
- *   const useMyStore = createStore<MyState>((set, get) => ({ ...initial state + actions }));
- *   const value = useMyStore((s) => s.someField);
- *   const whole = useMyStore(); // no selector -> whole state
- */
 export function createStore<T extends object>(
   createState: (
     set: (partial: Partial<T> | ((state: T) => Partial<T>)) => void,

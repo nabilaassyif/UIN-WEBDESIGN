@@ -55,7 +55,6 @@ function persist(settings: PersistedSettings) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   } catch {
-    /* ignore quota/availability errors */
   }
 }
 
@@ -160,7 +159,6 @@ export const useAccessibilityStore = createStore<AccessibilityState>((set, get) 
         set(parsed);
       }
     } catch {
-      /* ignore malformed storage */
     }
   },
 }));

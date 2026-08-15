@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -14,8 +13,6 @@ interface DocPhoto {
   category: string;
 }
 
-// Note: photo captions stay in Indonesian for now (editorial field notes).
-// Only the surrounding UI chrome is translated via useLanguage().
 const DOCUMENTATION_PHOTOS: DocPhoto[] = [
   {
     id: 'doc-1',
@@ -85,8 +82,6 @@ const DOCUMENTATION_PHOTOS: DocPhoto[] = [
   },
 ];
 
-// Varying aspect ratios so the columns feel like an organic masonry wall
-// rather than a uniform grid.
 const ASPECT_CYCLE = ['aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[4/5]', 'aspect-square'];
 
 export default function DocumentationSection() {
@@ -119,7 +114,6 @@ export default function DocumentationSection() {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', onKey);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePhotoIndex]);
 
   return (
@@ -129,7 +123,6 @@ export default function DocumentationSection() {
     >
       <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 pb-10 border-b border-[var(--border-color)]">
           <div>
             <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
@@ -144,7 +137,6 @@ export default function DocumentationSection() {
           </p>
         </div>
 
-        {/* Masonry Gallery */}
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
           {DOCUMENTATION_PHOTOS.map((photo, idx) => (
             <div
@@ -184,7 +176,6 @@ export default function DocumentationSection() {
         </div>
       </div>
 
-      {/* Lightbox */}
       {activePhoto && (
         <div
           className="fixed inset-0 z-50 flex flex-col bg-black/97 backdrop-blur-md animate-fade-in"
@@ -218,7 +209,6 @@ export default function DocumentationSection() {
             <span className="material-symbols-outlined text-[32px]">chevron_right</span>
           </button>
 
-          {/* Image stage */}
           <div className="flex-1 flex items-center justify-center px-6 sm:px-20 pt-16 pb-6 min-h-0">
             <img
               src={activePhoto.imageUrl}
@@ -227,7 +217,6 @@ export default function DocumentationSection() {
             />
           </div>
 
-          {/* Caption bar */}
           <div className="shrink-0 px-6 sm:px-10 pb-6 pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="max-w-2xl">
               <span className="text-[10px] uppercase tracking-widest text-white/50 block mb-1.5">
@@ -247,7 +236,6 @@ export default function DocumentationSection() {
             </span>
           </div>
 
-          {/* Thumbnail filmstrip */}
           <div className="shrink-0 flex gap-2 px-6 sm:px-10 pb-6 overflow-x-auto">
             {DOCUMENTATION_PHOTOS.map((p, i) => (
               <button

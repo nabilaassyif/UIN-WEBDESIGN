@@ -39,7 +39,6 @@ export default function AccessibilityButton({
 
   return (
     <div className="relative flex flex-col items-end">
-      {/* Tooltip Nudge */}
       <div
         className={`absolute -top-12 right-0 bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-color-strong)] font-normal px-3.5 py-2 rounded-xl text-xs whitespace-nowrap shadow-lg transition-all duration-300 pointer-events-none ${
           showTooltip && !isOpen
@@ -52,7 +51,6 @@ export default function AccessibilityButton({
         <div className="absolute -bottom-1.5 right-6 w-2.5 h-2.5 bg-[var(--bg-elevated)] border-r border-b border-[var(--border-color-strong)] rotate-45" />
       </div>
 
-      {/* Floating Accessibility Button */}
       <button
         aria-controls="accessibility-panel"
         aria-expanded={isOpen}

@@ -59,7 +59,6 @@ export const useThemeStore = createStore<ThemeState>((set, get) => ({
       set({ theme });
       applyThemeToDom(theme);
     } catch {
-      /* ignore */
     }
   },
 }));

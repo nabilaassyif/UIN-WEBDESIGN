@@ -102,7 +102,6 @@ export default function ContactSection() {
       <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
-          {/* Left Column */}
           <div className="lg:col-span-5">
             <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
               {t('contact.eyebrow')}
@@ -114,7 +113,6 @@ export default function ContactSection() {
               {t('contact.description')}
             </p>
 
-            {/* Contact Details */}
             <div className="divide-y divide-[var(--border-color)] border-t border-[var(--border-color)]">
               <div className="flex items-baseline justify-between gap-6 py-5">
                 <h3 className="text-[11px] uppercase tracking-widest text-[var(--text-muted)] shrink-0">
@@ -148,7 +146,6 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Right Column: Form */}
           <div className="lg:col-span-7">
             {isSuccess ? (
               <div className="py-16 border-t border-[var(--border-color)]">

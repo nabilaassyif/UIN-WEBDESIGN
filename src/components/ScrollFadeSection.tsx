@@ -22,10 +22,8 @@ export default function ScrollFadeSection({
     const el = domRef.current;
     if (!el) return;
 
-    // Check if element is already in viewport on mount
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0) {
-      // Small timeout to allow initial render paint so fade-in animation triggers nicely
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 50);

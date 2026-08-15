@@ -19,7 +19,6 @@ export default function AboutSection() {
       <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-          {/* Left Column: Image & Floating Stat Card */}
           <div className="lg:col-span-6 relative">
             <div className="relative aspect-[4/5] w-full overflow-hidden border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
               <div
@@ -32,7 +31,6 @@ export default function AboutSection() {
               />
             </div>
 
-            {/* Floating Stat Card */}
             <div className="absolute -bottom-6 -right-3 sm:-bottom-8 sm:right-6 bg-[var(--bg-elevated)] border border-[var(--border-color)] px-8 py-6 shadow-2xl z-10 min-w-[170px]">
               <div className="font-serif text-3xl sm:text-4xl font-normal text-[var(--accent)] mb-1">
                 50+
@@ -43,20 +41,16 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right Column: Heading, Paragraphs & Stats */}
           <div className="lg:col-span-6 flex flex-col justify-center pt-8 lg:pt-0">
-            {/* Main Headline */}
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)] leading-[1.2] mb-8">
               {t('about.heading')}
             </h2>
 
-            {/* Paragraphs */}
             <div className="space-y-6 text-sm sm:text-base text-[var(--text-secondary)] font-light leading-relaxed mb-12">
               <p>{t('about.p1')}</p>
               <p>{t('about.p2')}</p>
             </div>
 
-            {/* Stats Row */}
             <div className="pt-8 border-t border-[var(--border-color)] grid grid-cols-3 gap-6">
               {stats.map((stat) => (
                 <div key={stat.label}>

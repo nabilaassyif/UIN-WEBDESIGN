@@ -92,7 +92,6 @@
     min-height: 100vh;
   }
 
-  /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -121,17 +120,11 @@
   }
 }
 
-/* Focus indicator for keyboard navigation */
 *:focus-visible {
   outline: 2px solid #FFB39F !important;
   outline-offset: 3px !important;
 }
 
-/* ========================================== */
-/* ATURAN FITUR AKSESIBILITAS                 */
-/* ========================================== */
-
-/* 1. Ukuran Teks (Text Size) */
 body.access-text-sm {
   font-size: 88% !important;
 }
@@ -139,7 +132,6 @@ body.access-text-lg {
   font-size: 116% !important;
 }
 
-/* 2. Spasi Baris (Line Height) */
 body.access-line-height-relaxed p,
 body.access-line-height-relaxed span,
 body.access-line-height-relaxed a,
@@ -153,7 +145,6 @@ body.access-line-height-extra li {
   line-height: 2.35 !important;
 }
 
-/* 3. Spasi Huruf (Letter Spacing) */
 body.access-spacing-wide * {
   letter-spacing: 0.05em !important;
 }
@@ -161,7 +152,6 @@ body.access-spacing-extra * {
   letter-spacing: 0.12em !important;
 }
 
-/* 4. High Contrast (Kontras Tinggi) */
 html.access-high-contrast,
 body.access-high-contrast {
   background-color: #000000 !important;
@@ -230,16 +220,6 @@ body.access-high-contrast #accessibility-panel {
   border: 2px solid #ffff00 !important;
 }
 
-
-/* 5. Grayscale (Hitam Putih)
-   Deliberately NOT using `filter` on <body> (or any wrapper): filter on an
-   ancestor creates a new containing block for position:fixed/sticky
-   descendants, which breaks sticky headers and this widget's own fixed
-   positioning. Instead, a dedicated full-viewport overlay uses
-   `backdrop-filter` to desaturate everything visually, without altering
-   how any element in the tree is positioned. The overlay div itself is
-   rendered once in layout.tsx (#access-grayscale-overlay) and is always
-   present in the DOM — only its backdrop-filter gets toggled here. */
 #access-grayscale-overlay {
   position: fixed;
   inset: 0;
@@ -249,12 +229,9 @@ body.access-high-contrast #accessibility-panel {
 body.access-grayscale #access-grayscale-overlay {
   backdrop-filter: grayscale(100%);
   -webkit-backdrop-filter: grayscale(100%);
-  /* Safari needs the element to actually paint something for
-     backdrop-filter to kick in; this alpha is invisible but sufficient. */
   background-color: rgba(255, 255, 255, 0.01);
 }
 
-/* 6. Dyslexia Friendly (OpenDyslexic) */
 body.access-dyslexia {
   --font-inter: 'OpenDyslexic', 'OpenDyslexicAlta', 'Comic Sans MS', sans-serif;
   --font-playfair: 'OpenDyslexic', 'OpenDyslexicAlta', 'Comic Sans MS', sans-serif;
@@ -274,8 +251,6 @@ body.access-dyslexia [class*='material-symbols'] {
   letter-spacing: normal !important;
 }
 
-
-/* 7. Reduce Motion (Kurangi Gerakan) */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.001ms !important;
@@ -305,8 +280,6 @@ body.access-reduce-motion .transform-gpu {
   pointer-events: auto !important;
 }
 
-
-/* 8. Highlight Links (Sorot Tautan) */
 body.access-highlight-links a {
   background-color: #FFB39F !important;
   color: #0B0B0B !important;
@@ -316,14 +289,12 @@ body.access-highlight-links a {
   border-radius: 2px !important;
 }
 
-/* 9. Enhanced Focus (Fokus Diperjelas) */
 body.access-focus *:focus,
 body.access-focus *:focus-visible {
   outline: 3px solid #FFB39F !important;
   outline-offset: 3px !important;
 }
 
-/* 10. Cursor Besar */
 html.access-cursor-large,
 body.access-cursor-large,
 body.access-cursor-large * {
@@ -367,8 +338,6 @@ body.access-high-contrast.access-cursor-large [role="button"] * {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 32 32'%3E%3Cpath d='M10 2 C9 2 8 3 8 4 L8 16 L6.5 14.5 C5.5 13.5 4 13.5 3 14.5 C2 15.5 2 17 3 18 L10.5 27 C12 28.8 14 29.8 16 29.8 L23 29.8 C25.8 29.8 28 27.6 28 24.8 L28 16.5 C28 15.4 27.1 14.5 26 14.5 C25.7 14.5 25.4 14.6 25.1 14.7 C24.8 13.8 24 13.2 23 13.2 C22.6 13.2 22.3 13.3 22 13.5 C21.6 12.6 20.8 12 19.8 12 C19.6 12 19.4 12 19.2 12.1 L19.2 4 C19.2 2.9 18.3 2 17.2 2 C16.1 2 15.2 2.9 15.2 4 L15.2 12 L13.8 12 L13.8 4 C13.8 2.9 12.9 2 11.8 2 L10 2 Z' fill='%23000000' stroke='%23FFFF00' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 10 2, pointer !important;
 }
 
-
-/* Keyframe animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -384,18 +353,16 @@ body.access-high-contrast.access-cursor-large [role="button"] * {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* --- Ukuran Teks Global --- */
 html[data-text-size="sm"] {
   font-size: 14px;
 }
 html[data-text-size="md"] {
-  font-size: 16px; /* Standar */
+  font-size: 16px;
 }
 html[data-text-size="lg"] {
   font-size: 18px;
 }
 
-/* --- Spasi Baris Global --- */
 html[data-line-height="normal"] {
   --app-line-height: 1.5;
 }
@@ -406,7 +373,6 @@ html[data-line-height="extra"] {
   --app-line-height: 2;
 }
 
-/* --- Jarak Huruf Global --- */
 html[data-letter-spacing="normal"] {
   letter-spacing: normal;
 }
@@ -417,7 +383,6 @@ html[data-letter-spacing="extra"] {
   letter-spacing: 0.1em;
 }
 
-/* Terapkan ke body */
 body {
   line-height: var(--app-line-height, 1.5);
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -259,8 +258,6 @@ export default function ArtworksSection() {
       id="karya-pilihan"
     >
       <div className="max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
-
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 pb-10 border-b border-[var(--border-color)]">
           <div>
             <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
@@ -275,7 +272,6 @@ export default function ArtworksSection() {
           </p>
         </div>
 
-        {/* Filter & Search Bar */}
         <div className="flex flex-col lg:flex-row justify-between gap-6 mb-14">
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => {
@@ -324,7 +320,6 @@ export default function ArtworksSection() {
           </div>
         </div>
 
-        {/* Gallery Bento Grid */}
         {total > 0 ? (
           <div className="flex flex-col gap-4 md:gap-5">
             {bentoGroups.map((group, gIdx) => (
@@ -353,7 +348,6 @@ export default function ArtworksSection() {
                           </span>
                         )}
 
-                        {/* Image Frame */}
                         <div className="relative w-full flex-1 overflow-hidden bg-[var(--bg-secondary)]">
                           <img
                             src={item.imageUrl}
@@ -369,12 +363,10 @@ export default function ArtworksSection() {
                           </span>
                         </div>
 
-                        {/* Animated Separator Line */}
                         <div className="w-full h-px bg-[var(--border-color)] mt-3 relative overflow-hidden">
                           <div className="absolute inset-0 bg-[var(--text-primary)] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out origin-left" />
                         </div>
 
-                        {/* Meta Data */}
                         <div className="flex flex-col gap-0.5 mt-2.5">
                           <div className="flex items-center justify-between mb-0.5">
                             <span className="text-[9px] tracking-[0.2em] uppercase text-[var(--accent)]">
@@ -420,7 +412,6 @@ export default function ArtworksSection() {
         )}
       </div>
 
-      {/* Modal Detail */}
       {activeModalArtwork && (
         <div
           className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-6 bg-black/85 backdrop-blur-sm animate-fade-in"
