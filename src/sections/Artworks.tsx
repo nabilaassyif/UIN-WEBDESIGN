@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLanguage } from '../lib/i18n/LanguageContext';
 
 export interface Artwork {
@@ -22,7 +22,6 @@ export interface Artwork {
     quote: string;
   };
 }
-
 
 const ARTWORKS_DATA: Artwork[] = [
   {
@@ -159,6 +158,46 @@ const ARTWORKS_DATA: Artwork[] = [
   },
 ];
 
+const BENTO_GROUP_SIZE = 6;
+
+function chunkIntoBento<T>(items: T[], size = BENTO_GROUP_SIZE): T[][] {
+  const groups: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    groups.push(items.slice(i, i + size));
+  }
+  return groups;
+}
+
+const getBentoClasses = (index: number, groupLength: number) => {
+  if (groupLength === 6) {
+    if (index === 0) return 'md:col-span-4 md:row-span-2';
+    if (index === 1) return 'md:col-span-2 md:row-span-1';
+    if (index === 2) return 'md:col-span-2 md:row-span-1';
+    if (index === 3) return 'md:col-span-2 md:row-span-1';
+    if (index === 4) return 'md:col-span-4 md:row-span-2';
+    if (index === 5) return 'md:col-span-2 md:row-span-1';
+  }
+  if (groupLength === 5) {
+    if (index === 0) return 'md:col-span-4 md:row-span-2';
+    if (index === 4) return 'md:col-span-4 md:row-span-1';
+    return 'md:col-span-2 md:row-span-1';
+  }
+  if (groupLength === 4) {
+    if (index === 0) return 'md:col-span-4 md:row-span-2';
+    if (index === 3) return 'md:col-span-6 md:row-span-1';
+    return 'md:col-span-2 md:row-span-1';
+  }
+  if (groupLength === 3) {
+    if (index === 0) return 'md:col-span-4 md:row-span-2';
+    return 'md:col-span-2 md:row-span-1';
+  }
+  if (groupLength === 2) {
+    if (index === 0) return 'md:col-span-4 md:row-span-1';
+    return 'md:col-span-2 md:row-span-1';
+  }
+  return 'md:col-span-6 md:row-span-1';
+};
+
 export default function ArtworksSection() {
   const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -166,11 +205,11 @@ export default function ArtworksSection() {
   const [activeModalArtwork, setActiveModalArtwork] = useState<Artwork | null>(null);
 
   const categories = [
-    { id: 'all', label: t('artworks.catAll') },
-    { id: 'rotan', label: t('artworks.catRotan') },
-    { id: 'ulin', label: t('artworks.catUlin') },
-    { id: 'tenun', label: t('artworks.catTenun') },
-    { id: 'pusaka', label: t('artworks.catPusaka') },
+    { id: 'all', label: t('artworks.catAll') || 'Semua' },
+    { id: 'rotan', label: t('artworks.catRotan') || 'Rotan' },
+    { id: 'ulin', label: t('artworks.catUlin') || 'Ulin' },
+    { id: 'tenun', label: t('artworks.catTenun') || 'Tenun' },
+    { id: 'pusaka', label: t('artworks.catPusaka') || 'Pusaka' },
   ];
 
   const filteredArtworks = useMemo(() => {
@@ -187,265 +226,292 @@ export default function ArtworksSection() {
     });
   }, [selectedCategory, searchQuery]);
 
+  const total = filteredArtworks.length;
+  const bentoGroups = useMemo(() => chunkIntoBento(filteredArtworks), [filteredArtworks]);
+
+  useEffect(() => {
+    if (activeModalArtwork) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [activeModalArtwork]);
+
+  useEffect(() => {
+    if (!activeModalArtwork) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveModalArtwork(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeModalArtwork]);
+
+  const modalIndex = activeModalArtwork
+    ? filteredArtworks.findIndex((a) => a.id === activeModalArtwork.id)
+    : -1;
+
   return (
     <section
-      className="w-full bg-[var(--bg-primary)] border-t border-[var(--border-color)] py-24 md:py-36"
+      className="w-full bg-[var(--bg-primary)] border-t border-[var(--border-color)] py-24 md:py-32"
       id="karya-pilihan"
     >
       <div className="max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
+
         {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-        <div>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--accent)] mb-3 block">
-            {t('artworks.eyebrow')}
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)]">
-            {t('artworks.heading')}
-          </h2>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 pb-10 border-b border-[var(--border-color)]">
+          <div>
+            <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
+              {t('artworks.eyebrow')}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-normal text-[var(--text-primary)] max-w-lg leading-[1.15]">
+              {t('artworks.heading')}
+            </h2>
+          </div>
+          <p className="text-sm text-[var(--text-secondary)] max-w-md font-light leading-relaxed">
+            {t('artworks.description')}
+          </p>
         </div>
-        <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md font-light leading-relaxed">
-          {t('artworks.description')}
-        </p>
-      </div>
 
-      {/* Filter & Search Bar */}
-      <div className="flex flex-col lg:flex-row justify-between gap-4 mb-12 pb-6 border-b border-[var(--border-color)]">
-        {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => {
-            const isActive = selectedCategory === cat.id;
-            return (
+        {/* Filter & Search Bar */}
+        <div className="flex flex-col lg:flex-row justify-between gap-6 mb-14">
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`relative px-1 py-2 text-xs font-medium uppercase tracking-widest transition-colors duration-300 cursor-pointer focus:outline-none min-w-[60px] text-left
+                  ${isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'}`}
+                  type="button"
+                  aria-pressed={isActive}
+                >
+                  {cat.label}
+                  <span
+                    className={`absolute bottom-0 left-0 h-px bg-[var(--text-primary)] transition-all duration-300 ease-out
+                    ${isActive ? 'w-full' : 'w-0'}`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative w-full lg:w-72">
+            <input
+              type="text"
+              placeholder={t('artworks.searchPlaceholder') || 'Cari koleksi'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent border-0 border-b border-[var(--border-color)] pl-6 pr-6 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-primary)] transition-colors"
+              aria-label={t('artworks.searchAria')}
+            />
+            <span className="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-[16px] pointer-events-none">
+              search
+            </span>
+            {searchQuery && (
               <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.08em] transition-all duration-200 border rounded-[2px] cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)] ${
-                  isActive
-                    ? 'border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] font-semibold'
-                    : 'border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-color-strong)]'
-                }`}
+                onClick={() => setSearchQuery('')}
+                className="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] text-[16px] cursor-pointer"
+                aria-label={t('artworks.clearSearch')}
                 type="button"
-                aria-pressed={isActive}
               >
-                {cat.label}
+                close
               </button>
-            );
-          })}
+            )}
+          </div>
         </div>
 
-        {/* Search Input */}
-        <div className="relative w-full lg:w-72">
-          <input
-            type="text"
-            placeholder={t('artworks.searchPlaceholder')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[2px] pl-9 pr-8 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/50 transition-colors"
-            aria-label={t('artworks.searchAria')}
-          />
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-[16px] pointer-events-none">
-            search
-          </span>
-          {searchQuery && (
+        {/* Gallery Bento Grid */}
+        {total > 0 ? (
+          <div className="flex flex-col gap-4 md:gap-5">
+            {bentoGroups.map((group, gIdx) => (
+              <div
+                key={gIdx}
+                className="grid grid-cols-1 md:grid-cols-6 auto-rows-[auto] md:auto-rows-[minmax(110px,auto)] gap-4 md:gap-5"
+              >
+                {group.map((item, i) => {
+                  const globalIdx = gIdx * BENTO_GROUP_SIZE + i;
+                  const isFeatured = globalIdx === 0;
+
+                  return (
+                    <article
+                      key={item.id}
+                      className={`${getBentoClasses(i, group.length)} min-h-[220px] md:min-h-0 relative flex flex-col group`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setActiveModalArtwork(item)}
+                        className="flex flex-col w-full h-full text-left cursor-pointer focus:outline-none group"
+                        aria-label={`${t('artworks.detailBtn')}: ${item.title}`}
+                      >
+                        {isFeatured && (
+                          <span className="text-[9px] tracking-[0.2em] uppercase text-[var(--accent)] mb-2 font-medium block">
+                            Featured / 01
+                          </span>
+                        )}
+
+                        {/* Image Frame */}
+                        <div className="relative w-full flex-1 overflow-hidden bg-[var(--bg-secondary)]">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover filter brightness-[0.94] saturate-[0.96] group-hover:brightness-105 group-hover:saturate-105 group-hover:scale-[1.03] transition-all duration-700 ease-out"
+                          />
+
+                          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent opacity-60 group-hover:opacity-25 transition-opacity duration-500 pointer-events-none" />
+
+                          <span className="absolute left-3 bottom-2.5 text-[9px] tracking-widest text-[var(--text-primary)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 pointer-events-none">
+                            {t('artworks.detailBtn') ? (t('artworks.detailBtn') as string).toUpperCase() : 'VIEW STORY'} →
+                          </span>
+                        </div>
+
+                        {/* Animated Separator Line */}
+                        <div className="w-full h-px bg-[var(--border-color)] mt-3 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-[var(--text-primary)] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out origin-left" />
+                        </div>
+
+                        {/* Meta Data */}
+                        <div className="flex flex-col gap-0.5 mt-2.5">
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="text-[9px] tracking-[0.2em] uppercase text-[var(--accent)]">
+                              {item.categoryLabel}
+                            </span>
+                            <span className="text-[8px] tracking-widest text-[var(--text-muted)] opacity-75 group-hover:opacity-100 transition-opacity">
+                              {String(globalIdx + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+                            </span>
+                          </div>
+                          <h3 className="font-serif text-sm md:text-base text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent)] transition-colors">
+                            {item.title}
+                          </h3>
+                          <span className="text-[9px] font-light text-[var(--text-muted)] mt-0.5">
+                            {item.origin}
+                          </span>
+                        </div>
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 px-4 border-t border-[var(--border-color)]">
+            <h3 className="font-serif text-xl text-[var(--text-primary)] mb-2">
+              {t('artworks.emptyTitle')}
+            </h3>
+            <p className="text-sm text-[var(--text-secondary)] max-w-sm mx-auto mb-6 font-light">
+              {t('artworks.emptyBodyPrefix')} &ldquo;{searchQuery}&rdquo;.
+            </p>
             <button
-              onClick={() => setSearchQuery('')}
-              className="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] text-[15px] cursor-pointer"
-              aria-label={t('artworks.clearSearch')}
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('all');
+              }}
+              className="text-xs font-medium uppercase tracking-widest text-[var(--text-primary)] border-b border-[var(--text-primary)] pb-1 cursor-pointer hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors"
               type="button"
             >
-              close
+              {t('artworks.resetFilter')}
             </button>
-          )}
-        </div>
-      </div>
-
-      {/* Artworks Grid */}
-      {filteredArtworks.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredArtworks.map((item) => (
-            <article
-              key={item.id}
-              className="group border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden flex flex-col justify-between hover:border-[var(--border-color-strong)] transition-all duration-300 shadow-xl"
-            >
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-tertiary)]">
-                <div
-                  className="w-full h-full bg-cover bg-center object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
-                  style={{ backgroundImage: `url('${item.imageUrl}')` }}
-                  role="img"
-                  aria-label={item.title}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-secondary)] via-transparent to-transparent opacity-80" />
-
-                {/* Tribe Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-0.5 bg-[var(--overlay-scrim)] backdrop-blur-md border border-[var(--border-color)] text-[9px] uppercase font-semibold tracking-widest text-[var(--accent)]">
-                    {item.tribe}
-                  </span>
-                </div>
-              </div>
-
-              {/* Card Body */}
-              <div className="p-6 flex flex-col flex-1 justify-between">
-                <div>
-                  <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
-                    {item.origin}
-                  </div>
-                  <h3 className="font-serif text-xl font-normal text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent)] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-4 line-clamp-2 font-light">
-                    {item.description}
-                  </p>
-
-                  {/* Material Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-6">
-                    {item.materials.slice(0, 2).map((mat, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] px-2 py-0.5 bg-white/5 border border-[var(--border-color)] text-[var(--text-secondary)]"
-                      >
-                        {mat}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Detail Button */}
-                <button
-                  onClick={() => setActiveModalArtwork(item)}
-                  className="w-full py-2.5 border border-[var(--border-color-strong)] bg-transparent hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] hover:border-[var(--text-primary)] text-[var(--text-primary)] text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 rounded-[2px] flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
-                  type="button"
-                >
-                  <span>{t('artworks.detailBtn')}</span>
-                  <span className="text-sm">→</span>
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : (
-        /* Empty State */
-        <div className="text-center py-16 px-4 border border-[var(--border-color)] bg-[var(--bg-secondary)]">
-          <span className="material-symbols-outlined text-3xl text-[var(--accent)] mb-3 block">
-            search_off
-          </span>
-          <h3 className="font-serif text-lg text-[var(--text-primary)] mb-1">
-            {t('artworks.emptyTitle')}
-          </h3>
-          <p className="text-xs text-[var(--text-secondary)] max-w-sm mx-auto mb-4 font-light">
-            {t('artworks.emptyBodyPrefix')} &ldquo;{searchQuery}&rdquo;.
-          </p>
-          <button
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategory('all');
-            }}
-            className="px-5 py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] text-xs font-semibold uppercase tracking-wider rounded-[2px] cursor-pointer"
-            type="button"
-          >
-            {t('artworks.resetFilter')}
-          </button>
-        </div>
-      )}
+          </div>
+        )}
       </div>
 
       {/* Modal Detail */}
       {activeModalArtwork && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[var(--overlay-scrim)] backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-6 bg-black/85 backdrop-blur-sm animate-fade-in"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-artwork-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setActiveModalArtwork(null);
+          }}
         >
-          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[var(--bg-tertiary)] border border-[var(--border-color-strong)] rounded-xl shadow-2xl p-6 sm:p-8">
+          <div className="relative w-full max-w-6xl h-[100vh] md:h-auto md:max-h-[92vh] flex flex-col md:grid md:grid-cols-[1.1fr_1fr] bg-[var(--bg-primary)] overflow-y-auto animate-slide-up">
+
             <button
               onClick={() => setActiveModalArtwork(null)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)] cursor-pointer"
+              className="absolute top-5 right-5 z-10 w-9 h-9 flex items-center justify-center text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors focus:outline-none cursor-pointer"
               aria-label={t('artworks.closeDialog')}
               type="button"
             >
-              <span className="material-symbols-outlined text-[18px]">close</span>
+              <span className="material-symbols-outlined text-[22px]">close</span>
             </button>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-2">
-              <div>
-                <div className="overflow-hidden border border-[var(--border-color)] aspect-square relative bg-[var(--bg-tertiary)] rounded-md">
-                  <div
-                    className="w-full h-full bg-cover bg-center"
-                    style={{ backgroundImage: `url('${activeModalArtwork.imageUrl}')` }}
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-0.5 bg-[var(--overlay-scrim)] backdrop-blur-md border border-[var(--border-color)] text-[9px] uppercase font-semibold text-[var(--accent)] tracking-wider">
-                    {activeModalArtwork.categoryLabel}
-                  </div>
-                </div>
+            <div className="relative bg-[var(--bg-secondary)] min-h-[40vh] md:min-h-0">
+              <img
+                src={activeModalArtwork.imageUrl}
+                alt={activeModalArtwork.title}
+                className="w-full h-full object-cover block"
+              />
+              <span className="absolute top-5 left-5 text-[10px] uppercase font-medium tracking-widest text-[var(--text-primary)] bg-[var(--bg-primary)]/60 backdrop-blur-sm px-3 py-1.5">
+                {activeModalArtwork.categoryLabel}
+              </span>
+            </div>
 
-                <div className="mt-4 p-4 border border-[var(--border-color)] bg-[var(--bg-input)] rounded-md">
-                  <div className="text-[11px] font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
-                    {activeModalArtwork.artisan.name} &bull; {activeModalArtwork.artisan.role}
-                  </div>
-                  <p className="text-xs italic text-[var(--text-secondary)] font-light">
-                    &ldquo;{activeModalArtwork.artisan.quote}&rdquo;
-                  </p>
-                </div>
+            <div className="flex flex-col p-8 md:p-10 lg:p-12 text-[var(--text-primary)]">
+              <div className="mb-7">
+                <span className="text-[10px] tracking-widest text-[var(--text-muted)] block mb-2">
+                  {modalIndex >= 0 ? String(modalIndex + 1).padStart(2, '0') : '01'} / {String(total || 1).padStart(2, '0')}
+                </span>
+                <span className="text-[11px] font-medium uppercase tracking-widest text-[var(--accent)]">
+                  {activeModalArtwork.tribe} &bull; {activeModalArtwork.origin}
+                </span>
+                <h3
+                  id="modal-artwork-title"
+                  className="font-serif text-3xl md:text-4xl lg:text-[2.75rem] font-normal leading-[1.1] mt-2"
+                >
+                  {activeModalArtwork.title}
+                </h3>
               </div>
 
-              <div className="flex flex-col justify-between space-y-4">
-                <div>
-                  <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[var(--accent)]">
-                    {activeModalArtwork.tribe} &bull; {activeModalArtwork.origin}
-                  </span>
-                  <h3
-                    id="modal-artwork-title"
-                    className="font-serif text-2xl sm:text-3xl font-normal text-[var(--text-primary)] mt-1 mb-3"
-                  >
-                    {activeModalArtwork.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-light mb-4">
-                    {activeModalArtwork.story}
-                  </p>
-                </div>
+              <p className="text-sm text-[var(--text-secondary)] font-light leading-relaxed mb-8">
+                {activeModalArtwork.story}
+              </p>
 
-                <div className="space-y-2 pt-3 border-t border-[var(--border-color)] text-xs font-light">
-                  <div className="flex justify-between">
-                    <span className="text-[var(--text-muted)] uppercase text-[10px] tracking-wider">
-                      {t('artworks.dimensi')}:
-                    </span>
-                    <span className="text-[var(--text-primary)]">{activeModalArtwork.dimensions}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[var(--text-muted)] uppercase text-[10px] tracking-wider">
-                      {t('artworks.waktu')}:
-                    </span>
-                    <span className="text-[var(--text-primary)]">{activeModalArtwork.craftingTime}</span>
-                  </div>
-                  <div>
-                    <span className="text-[var(--text-muted)] uppercase text-[10px] tracking-wider block mb-1">
-                      {t('artworks.bahan')}:
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {activeModalArtwork.materials.map((m, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-0.5 bg-white/5 text-[11px] text-[var(--accent)] border border-[var(--border-color)]"
-                        >
-                          {m}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              <dl className="divide-y divide-[var(--border-color)] border-t border-[var(--border-color)] text-sm mb-8">
+                <div className="flex items-baseline justify-between gap-4 py-4">
+                  <dt className="text-[11px] uppercase tracking-widest text-[var(--text-muted)] shrink-0">
+                    {t('artworks.dimensi')}
+                  </dt>
+                  <dd className="text-right font-light">{activeModalArtwork.dimensions}</dd>
                 </div>
+                <div className="flex items-baseline justify-between gap-4 py-4">
+                  <dt className="text-[11px] uppercase tracking-widest text-[var(--text-muted)] shrink-0">
+                    {t('artworks.waktu')}
+                  </dt>
+                  <dd className="text-right font-light">{activeModalArtwork.craftingTime}</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4 py-4">
+                  <dt className="text-[11px] uppercase tracking-widest text-[var(--text-muted)] shrink-0">
+                    {t('artworks.bahan')}
+                  </dt>
+                  <dd className="text-right font-light">
+                    {activeModalArtwork.materials.join(' · ')}
+                  </dd>
+                </div>
+              </dl>
 
-                <div className="pt-4">
-                  <a
-                    href="#kontak"
-                    onClick={() => setActiveModalArtwork(null)}
-                    className="w-full py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] font-bold text-xs uppercase tracking-widest text-center hover:opacity-90 transition-opacity flex items-center justify-center gap-2 rounded-[2px]"
-                  >
-                    <span>{t('artworks.ctaAvailability')}</span>
-                    <span className="text-sm">→</span>
-                  </a>
-                </div>
+              <div className="mt-auto border-l border-[var(--border-color)] pl-5 mb-8">
+                <p className="text-sm italic font-light text-[var(--text-secondary)] leading-relaxed">
+                  &ldquo;{activeModalArtwork.artisan.quote}&rdquo;
+                </p>
+                <span className="block text-[11px] uppercase tracking-widest text-[var(--text-muted)] mt-3">
+                  {activeModalArtwork.artisan.name} &bull; {activeModalArtwork.artisan.role}
+                </span>
               </div>
+
+              <a
+                href="#kontak"
+                onClick={() => setActiveModalArtwork(null)}
+                className="group w-full flex items-center justify-between border-t border-[var(--text-primary)] pt-4 text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors"
+              >
+                <span>{t('artworks.ctaAvailability')}</span>
+                <span className="text-sm transition-transform group-hover:translate-x-1">→</span>
+              </a>
             </div>
           </div>
         </div>

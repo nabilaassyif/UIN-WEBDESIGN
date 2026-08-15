@@ -176,9 +176,27 @@ body.access-high-contrast button {
   outline: 2px solid #FFFF00 !important;
 }
 
-/* 5. Grayscale (Hitam Putih) */
-body.access-grayscale {
-  filter: grayscale(100%) !important;
+/* 5. Grayscale (Hitam Putih)
+   Deliberately NOT using `filter` on <body> (or any wrapper): filter on an
+   ancestor creates a new containing block for position:fixed/sticky
+   descendants, which breaks sticky headers and this widget's own fixed
+   positioning. Instead, a dedicated full-viewport overlay uses
+   `backdrop-filter` to desaturate everything visually, without altering
+   how any element in the tree is positioned. The overlay div itself is
+   rendered once in layout.tsx (#access-grayscale-overlay) and is always
+   present in the DOM — only its backdrop-filter gets toggled here. */
+#access-grayscale-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+}
+body.access-grayscale #access-grayscale-overlay {
+  backdrop-filter: grayscale(100%);
+  -webkit-backdrop-filter: grayscale(100%);
+  /* Safari needs the element to actually paint something for
+     backdrop-filter to kick in; this alpha is invisible but sufficient. */
+  background-color: rgba(255, 255, 255, 0.01);
 }
 
 /* 6. Dyslexia Friendly (OpenDyslexic) */
@@ -258,4 +276,42 @@ body.access-cursor-large * {
 
 .animate-fade-in {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- Ukuran Teks Global --- */
+html[data-text-size="sm"] {
+  font-size: 14px;
+}
+html[data-text-size="md"] {
+  font-size: 16px; /* Standar */
+}
+html[data-text-size="lg"] {
+  font-size: 18px;
+}
+
+/* --- Spasi Baris Global --- */
+html[data-line-height="normal"] {
+  --app-line-height: 1.5;
+}
+html[data-line-height="relaxed"] {
+  --app-line-height: 1.75;
+}
+html[data-line-height="extra"] {
+  --app-line-height: 2;
+}
+
+/* --- Jarak Huruf Global --- */
+html[data-letter-spacing="normal"] {
+  letter-spacing: normal;
+}
+html[data-letter-spacing="wide"] {
+  letter-spacing: 0.05em;
+}
+html[data-letter-spacing="extra"] {
+  letter-spacing: 0.1em;
+}
+
+/* Terapkan ke body */
+body {
+  line-height: var(--app-line-height, 1.5);
 }

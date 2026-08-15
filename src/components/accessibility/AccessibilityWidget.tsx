@@ -24,6 +24,10 @@ const ALL_ACCESS_CLASSES = [
   'access-cursor-large',
 ];
 
+// Classes go back on document.body. Grayscale no longer relies on `filter`
+// on an ancestor (that broke fixed/sticky descendants like the site header
+// and this widget) — it now uses a `backdrop-filter` overlay instead, so
+// body itself never gets a `filter` property and nothing downstream breaks.
 export default function AccessibilityWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const store = useAccessibilityStore();

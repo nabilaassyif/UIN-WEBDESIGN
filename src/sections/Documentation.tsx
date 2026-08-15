@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../lib/i18n/LanguageContext';
 
 interface DocPhoto {
@@ -84,6 +84,10 @@ const DOCUMENTATION_PHOTOS: DocPhoto[] = [
   },
 ];
 
+// Varying aspect ratios so the columns feel like an organic masonry wall
+// rather than a uniform grid.
+const ASPECT_CYCLE = ['aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[4/5]', 'aspect-square'];
+
 export default function DocumentationSection() {
   const { t } = useLanguage();
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
@@ -100,6 +104,23 @@ export default function DocumentationSection() {
 
   const activePhoto = activePhotoIndex !== null ? DOCUMENTATION_PHOTOS[activePhotoIndex] : null;
 
+  useEffect(() => {
+    if (activePhotoIndex === null) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActivePhotoIndex(null);
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'ArrowRight') handleNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePhotoIndex]);
+
   return (
     <section
       className="relative w-full min-w-full overflow-x-clip border-t border-[var(--border-color)] py-24 md:py-36"
@@ -108,27 +129,27 @@ export default function DocumentationSection() {
       <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 pb-10 border-b border-[var(--border-color)]">
           <div>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--accent)] mb-3 block">
+            <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
               {t('documentation.eyebrow')}
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)]">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)] leading-[1.15]">
               {t('documentation.heading')}
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md font-light leading-relaxed">
+          <p className="text-sm text-[var(--text-secondary)] max-w-md font-light leading-relaxed">
             {t('documentation.description')}
           </p>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Masonry Gallery */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
           {DOCUMENTATION_PHOTOS.map((photo, idx) => (
             <div
               key={photo.id}
               onClick={() => setActivePhotoIndex(idx)}
-              className="group relative overflow-hidden border border-[var(--border-color)] bg-[var(--bg-secondary)] aspect-[4/3] cursor-pointer shadow-xl hover:border-[var(--border-color-strong)] transition-all duration-500"
+              className={`group relative overflow-hidden bg-[var(--bg-secondary)] mb-6 break-inside-avoid cursor-pointer ${ASPECT_CYCLE[idx % ASPECT_CYCLE.length]}`}
               role="button"
               tabIndex={0}
               aria-label={`${t('documentation.enlarge')}: ${photo.title}`}
@@ -139,88 +160,113 @@ export default function DocumentationSection() {
               }}
             >
               <div
-                className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
+                className="w-full h-full bg-cover bg-center grayscale group-hover:grayscale-0 group-hover:scale-[1.04] transition-all duration-700 ease-out"
                 style={{ backgroundImage: `url('${photo.imageUrl}')` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/30 to-transparent opacity-85 group-hover:opacity-90 transition-opacity" />
 
-              <div className="absolute top-3 left-3">
-                <span className="px-2.5 py-0.5 bg-[var(--overlay-scrim)] backdrop-blur-md border border-[var(--border-color)] text-[9px] uppercase font-semibold tracking-wider text-[var(--accent)]">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <span className="absolute top-4 left-4 font-serif text-sm text-white/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                {String(idx + 1).padStart(2, '0')}
+              </span>
+
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                <span className="text-[9px] uppercase tracking-widest text-white/70 block mb-1">
                   {photo.category}
                 </span>
-              </div>
-
-              <div className="absolute bottom-4 left-4 right-4 transform translate-y-0.5 group-hover:translate-y-0 transition-transform">
-                <h3 className="font-serif text-base font-normal text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors mb-1">
+                <h3 className="font-serif text-sm text-white leading-snug">
                   {photo.title}
                 </h3>
-                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)]">
-                  <span>{photo.location}</span>
-                  <span className="text-[var(--accent)]">{t('documentation.enlarge')}</span>
-                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox */}
       {activePhoto && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[var(--overlay-scrim)] backdrop-blur-xl animate-fade-in"
+          className="fixed inset-0 z-50 flex flex-col bg-black/97 backdrop-blur-md animate-fade-in"
           role="dialog"
           aria-modal="true"
         >
           <button
             onClick={() => setActivePhotoIndex(null)}
-            className="absolute top-6 right-6 z-50 w-9 h-9 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-[var(--text-primary)] transition-colors cursor-pointer"
+            className="absolute top-6 right-6 z-50 text-white/70 hover:text-white transition-colors cursor-pointer"
             aria-label={t('documentation.closeLightbox')}
             type="button"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <span className="material-symbols-outlined text-[24px]">close</span>
           </button>
 
           <button
             onClick={handlePrev}
-            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-[var(--text-primary)] transition-colors cursor-pointer"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-50 text-white/50 hover:text-white transition-colors cursor-pointer"
             aria-label={t('documentation.prevPhoto')}
             type="button"
           >
-            <span className="material-symbols-outlined text-[22px]">chevron_left</span>
+            <span className="material-symbols-outlined text-[32px]">chevron_left</span>
           </button>
 
           <button
             onClick={handleNext}
-            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-[var(--text-primary)] transition-colors cursor-pointer"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 text-white/50 hover:text-white transition-colors cursor-pointer"
             aria-label={t('documentation.nextPhoto')}
             type="button"
           >
-            <span className="material-symbols-outlined text-[22px]">chevron_right</span>
+            <span className="material-symbols-outlined text-[32px]">chevron_right</span>
           </button>
 
-          <div className="relative max-w-4xl w-full bg-[var(--bg-tertiary)] rounded-xl overflow-hidden border border-[var(--border-color-strong)] shadow-2xl flex flex-col">
-            <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full bg-[var(--bg-input)] overflow-hidden">
-              <div
-                className="w-full h-full bg-contain bg-no-repeat bg-center"
-                style={{ backgroundImage: `url('${activePhoto.imageUrl}')` }}
-              />
+          {/* Image stage */}
+          <div className="flex-1 flex items-center justify-center px-6 sm:px-20 pt-16 pb-6 min-h-0">
+            <img
+              src={activePhoto.imageUrl}
+              alt={activePhoto.title}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+
+          {/* Caption bar */}
+          <div className="shrink-0 px-6 sm:px-10 pb-6 pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="max-w-2xl">
+              <span className="text-[10px] uppercase tracking-widest text-white/50 block mb-1.5">
+                {String(activePhotoIndex! + 1).padStart(2, '0')} / {String(DOCUMENTATION_PHOTOS.length).padStart(2, '0')}
+                {'  \u00b7  '}
+                {activePhoto.category} &bull; {activePhoto.year}
+              </span>
+              <h3 className="font-serif text-lg sm:text-xl text-white mb-1.5">
+                {activePhoto.title}
+              </h3>
+              <p className="text-xs text-white/50 font-light leading-relaxed hidden sm:block">
+                {activePhoto.description}
+              </p>
             </div>
-            <div className="p-5 sm:p-6 bg-[var(--bg-tertiary)] border-t border-[var(--border-color)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-              <div>
-                <span className="text-[9px] uppercase font-bold tracking-widest text-[var(--accent)] block mb-1">
-                  {activePhoto.category} &bull; {activePhoto.year}
-                </span>
-                <h3 className="font-serif text-lg font-normal text-[var(--text-primary)] mb-1">
-                  {activePhoto.title}
-                </h3>
-                <p className="text-xs text-[var(--text-secondary)] font-light max-w-xl">
-                  {activePhoto.description}
-                </p>
-              </div>
-              <div className="text-[11px] text-[var(--accent)] shrink-0">
-                {activePhoto.location}
-              </div>
-            </div>
+            <span className="text-[11px] text-white/60 shrink-0">
+              {activePhoto.location}
+            </span>
+          </div>
+
+          {/* Thumbnail filmstrip */}
+          <div className="shrink-0 flex gap-2 px-6 sm:px-10 pb-6 overflow-x-auto">
+            {DOCUMENTATION_PHOTOS.map((p, i) => (
+              <button
+                key={p.id}
+                onClick={() => setActivePhotoIndex(i)}
+                className={`relative shrink-0 w-14 h-14 sm:w-16 sm:h-16 overflow-hidden cursor-pointer transition-all duration-300 ${
+                  i === activePhotoIndex ? 'opacity-100' : 'opacity-40 hover:opacity-70'
+                }`}
+                aria-label={p.title}
+                type="button"
+              >
+                <div
+                  className="w-full h-full bg-cover bg-center"
+                  style={{ backgroundImage: `url('${p.imageUrl}')` }}
+                />
+                {i === activePhotoIndex && (
+                  <span className="absolute inset-x-0 bottom-0 h-[2px] bg-white" />
+                )}
+              </button>
+            ))}
           </div>
         </div>
       )}

@@ -99,6 +99,13 @@ export default function ProgramsSection() {
     setIsSubmitted(true);
   };
 
+  const inputClass = (hasError?: boolean) =>
+    `w-full bg-transparent border-0 border-b px-0 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none transition-colors ${
+      hasError
+        ? 'border-red-400'
+        : 'border-[var(--border-color)] focus:border-[var(--text-primary)]'
+    }`;
+
   return (
     <section
       className="relative w-full min-w-full overflow-x-clip border-t border-[var(--border-color)] py-24 md:py-36"
@@ -107,89 +114,65 @@ export default function ProgramsSection() {
       <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
       <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 pb-10 border-b border-[var(--border-color)]">
           <div>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--accent)] mb-3 block">
+            <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-[var(--accent)] mb-4 block">
               {t('programs.eyebrow')}
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)]">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)] leading-[1.15]">
               {t('programs.heading')}
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md font-light leading-relaxed">
+          <p className="text-sm text-[var(--text-secondary)] max-w-md font-light leading-relaxed">
             {t('programs.description')}
           </p>
         </div>
 
-        {/* Program Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {PROGRAMS_DATA.map((prog) => (
+        {/* Program List */}
+        <div className="grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-[var(--border-color)]">
+          {PROGRAMS_DATA.map((prog, idx) => (
             <div
               key={prog.id}
-              className="border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-[var(--border-color-strong)] transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-xl group"
+              className={`group flex flex-col ${idx > 0 ? 'md:pl-8' : ''} ${
+                idx < PROGRAMS_DATA.length - 1 ? 'md:pr-8' : ''
+              } ${idx > 0 ? 'pt-10 md:pt-0' : ''}`}
             >
               {/* Image */}
-              <div className="relative aspect-[16/9] overflow-hidden bg-[var(--bg-tertiary)]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-secondary)] mb-5">
                 <div
-                  className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
+                  className="w-full h-full bg-cover bg-center group-hover:scale-[1.03] transition-transform duration-700 filter brightness-[0.92] group-hover:brightness-100"
                   style={{ backgroundImage: `url('${prog.imageUrl}')` }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-secondary)] via-transparent to-transparent opacity-90" />
-                <div className="absolute top-3 left-3 px-2.5 py-0.5 bg-[var(--overlay-scrim)] backdrop-blur-md border border-[var(--border-color)] text-[9px] uppercase font-semibold text-[var(--accent)] tracking-widest">
-                  {prog.category}
-                </div>
               </div>
 
               {/* Content */}
-              <div className="p-6 flex flex-col flex-1 justify-between">
-                <div>
-                  <h3 className="font-serif text-xl font-normal text-[var(--text-primary)] mb-3 group-hover:text-[var(--accent)] transition-colors">
-                    {prog.title}
-                  </h3>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-5 font-light">
-                    {prog.description}
-                  </p>
+              <div className="flex flex-col flex-1">
+                <span className="text-[10px] uppercase font-medium tracking-widest text-[var(--accent)] mb-2 block">
+                  {prog.category}
+                </span>
+                <h3 className="font-serif text-xl font-normal text-[var(--text-primary)] mb-3 leading-snug">
+                  {prog.title}
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-5 font-light">
+                  {prog.description}
+                </p>
 
-                  <div className="space-y-2 py-3 border-y border-[var(--border-color)]/60 text-[11px] text-[var(--text-secondary)] mb-5 font-light">
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-[14px] text-[var(--accent)]">
-                        calendar_month
-                      </span>
-                      <span>{prog.schedule}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-[14px] text-[var(--accent)]">
-                        location_on
-                      </span>
-                      <span>{prog.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-[14px] text-[var(--accent)]">
-                        group
-                      </span>
-                      <span className="text-[var(--accent)] font-normal">{prog.seats}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5 mb-6">
-                    {prog.benefits.map((b, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] px-2 py-0.5 bg-white/5 border border-[var(--border-color)] text-[var(--text-muted)]"
-                      >
-                        ✓ {b}
-                      </span>
-                    ))}
-                  </div>
+                <div className="text-xs text-[var(--text-secondary)] font-light mb-5 space-y-1">
+                  <p>{prog.schedule} &middot; {prog.location}</p>
+                  <p className="text-[var(--accent)]">{prog.seats}</p>
                 </div>
+
+                <p className="text-[11px] text-[var(--text-muted)] font-light leading-relaxed mb-8">
+                  {prog.benefits.join('  /  ')}
+                </p>
 
                 <button
                   onClick={() => handleOpenRsvp(prog)}
-                  className="w-full py-2.5 border border-[var(--border-color-strong)] bg-transparent hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] hover:border-[var(--text-primary)] text-[var(--text-primary)] text-xs font-medium uppercase tracking-[0.1em] transition-all duration-300 rounded-[2px] flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
+                  className="group/btn mt-auto inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-[var(--text-primary)] border-b border-[var(--text-primary)] pb-1 self-start cursor-pointer hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors"
                   type="button"
                 >
                   <span>{t('programs.registerBtn')}</span>
-                  <span className="text-sm">→</span>
+                  <span className="transition-transform group-hover/btn:translate-x-1">→</span>
                 </button>
               </div>
             </div>
@@ -200,127 +183,123 @@ export default function ProgramsSection() {
       {/* Modal RSVP */}
       {selectedProgram && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[var(--overlay-scrim)] backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-sm animate-fade-in"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-lg bg-[var(--bg-tertiary)] border border-[var(--border-color-strong)] rounded-xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-[var(--bg-primary)] border border-[var(--border-color)] p-8 sm:p-10 max-h-[90vh] overflow-y-auto">
             <button
               onClick={handleCloseModal}
-              className="absolute top-5 right-5 w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)] cursor-pointer"
+              className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors focus:outline-none cursor-pointer"
               aria-label={t('artworks.closeDialog')}
               type="button"
             >
-              <span className="material-symbols-outlined text-[18px]">close</span>
+              <span className="material-symbols-outlined text-[20px]">close</span>
             </button>
 
             {!isSubmitted ? (
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[var(--accent)] block mb-1">
+                <span className="text-[11px] uppercase font-medium tracking-widest text-[var(--accent)] block mb-2">
                   {t('programs.rsvpEyebrow')}
                 </span>
-                <h3 className="font-serif text-2xl font-normal text-[var(--text-primary)] mb-2">
+                <h3 className="font-serif text-2xl font-normal text-[var(--text-primary)] mb-2 leading-snug">
                   {selectedProgram.title}
                 </h3>
-                <p className="text-xs text-[var(--text-muted)] mb-6 font-light">
+                <p className="text-xs text-[var(--text-muted)] mb-8 font-light pb-8 border-b border-[var(--border-color)]">
                   {selectedProgram.schedule} &bull; {selectedProgram.location}
                 </p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                      {t('programs.fullName')} *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formName}
-                      onChange={(e) => setFormName(e.target.value)}
-                      placeholder={t('contact.fullNamePlaceholder')}
-                      className={`w-full bg-[var(--bg-input)] border rounded-[2px] px-3.5 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/50 ${
-                        formErrors.name ? 'border-red-400' : 'border-[var(--border-color)]'
-                      }`}
-                    />
-                    {formErrors.name && (
-                      <span className="text-[10px] text-red-400 mt-1 block">{formErrors.name}</span>
-                    )}
-                  </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 mb-8">
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs text-[var(--text-muted)] mb-1.5">
+                        {t('programs.fullName')} *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formName}
+                        onChange={(e) => setFormName(e.target.value)}
+                        placeholder={t('contact.fullNamePlaceholder')}
+                        className={inputClass(!!formErrors.name)}
+                      />
+                      {formErrors.name && (
+                        <span className="text-[10px] text-red-400 mt-1.5 block">{formErrors.name}</span>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                      {t('programs.email')} *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formEmail}
-                      onChange={(e) => setFormEmail(e.target.value)}
-                      placeholder="nama@domain.com"
-                      className={`w-full bg-[var(--bg-input)] border rounded-[2px] px-3.5 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/50 ${
-                        formErrors.email ? 'border-red-400' : 'border-[var(--border-color)]'
-                      }`}
-                    />
-                    {formErrors.email && (
-                      <span className="text-[10px] text-red-400 mt-1 block">{formErrors.email}</span>
-                    )}
-                  </div>
+                    <div>
+                      <label className="block text-xs text-[var(--text-muted)] mb-1.5">
+                        {t('programs.email')} *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={formEmail}
+                        onChange={(e) => setFormEmail(e.target.value)}
+                        placeholder="nama@domain.com"
+                        className={inputClass(!!formErrors.email)}
+                      />
+                      {formErrors.email && (
+                        <span className="text-[10px] text-red-400 mt-1.5 block">{formErrors.email}</span>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                      {t('programs.phone')}
-                    </label>
-                    <input
-                      type="tel"
-                      value={formPhone}
-                      onChange={(e) => setFormPhone(e.target.value)}
-                      placeholder="+62 8xx xxxx xxxx"
-                      className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-[2px] px-3.5 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/50"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-xs text-[var(--text-muted)] mb-1.5">
+                        {t('programs.phone')}
+                      </label>
+                      <input
+                        type="tel"
+                        value={formPhone}
+                        onChange={(e) => setFormPhone(e.target.value)}
+                        placeholder="+62 8xx xxxx xxxx"
+                        className={inputClass()}
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-                      {t('programs.motivation')}
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={formNote}
-                      onChange={(e) => setFormNote(e.target.value)}
-                      placeholder={t('programs.motivationPlaceholder')}
-                      className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-[2px] p-3 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/50 resize-none font-light"
-                    />
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs text-[var(--text-muted)] mb-1.5">
+                        {t('programs.motivation')}
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={formNote}
+                        onChange={(e) => setFormNote(e.target.value)}
+                        placeholder={t('programs.motivationPlaceholder')}
+                        className={`${inputClass()} resize-none`}
+                      />
+                    </div>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-opacity rounded-[2px] mt-4 cursor-pointer"
+                    className="group/btn inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-[var(--text-primary)] border-b border-[var(--text-primary)] pb-1 cursor-pointer hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors"
                   >
-                    {t('programs.submit')}
+                    <span>{t('programs.submit')}</span>
+                    <span className="transition-transform group-hover/btn:translate-x-1">→</span>
                   </button>
                 </form>
               </div>
             ) : (
-              <div className="text-center py-6">
-                <span className="material-symbols-outlined text-4xl text-[var(--accent)] mb-3 block">
-                  check_circle
-                </span>
-                <h3 className="font-serif text-2xl font-normal text-[var(--text-primary)] mb-2">
+              <div className="py-6">
+                <h3 className="font-serif text-2xl font-normal text-[var(--text-primary)] mb-3">
                   {t('programs.successTitle')}
                 </h3>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-sm mx-auto mb-6 font-light">
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-8 font-light">
                   {formName && (
                     <>
-                      <strong className="text-[var(--text-primary)]">{formName}</strong>
+                      <span className="text-[var(--text-primary)]">{formName}</span>
                       {', '}
                     </>
                   )}
-                  <strong className="text-[var(--accent)]">{selectedProgram.title}</strong>
+                  <span className="text-[var(--accent)]">{selectedProgram.title}</span>
                   {' → '}
-                  <strong className="text-[var(--text-primary)]">{formEmail}</strong>
+                  <span className="text-[var(--text-primary)]">{formEmail}</span>
                 </p>
                 <button
                   onClick={handleCloseModal}
-                  className="px-6 py-2.5 bg-[var(--text-primary)] text-[var(--bg-primary)] text-xs font-bold uppercase tracking-wider rounded-[2px] cursor-pointer"
+                  className="text-xs font-medium uppercase tracking-widest text-[var(--text-primary)] border-b border-[var(--text-primary)] pb-1 cursor-pointer hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors"
                   type="button"
                 >
                   {t('programs.done')}
