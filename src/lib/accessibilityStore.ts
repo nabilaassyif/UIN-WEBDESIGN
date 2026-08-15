@@ -15,7 +15,6 @@ interface PersistedSettings {
   dyslexiaFriendly: boolean;
   reduceMotion: boolean;
   highlightLinks: boolean;
-  enhancedFocus: boolean;
   readingGuide: boolean;
   cursorLarge: boolean;
 }
@@ -29,7 +28,6 @@ interface AccessibilityState extends PersistedSettings {
   toggleDyslexiaFriendly: () => void;
   toggleReduceMotion: () => void;
   toggleHighlightLinks: () => void;
-  toggleEnhancedFocus: () => void;
   toggleReadingGuide: () => void;
   toggleCursorLarge: () => void;
   resetAll: () => void;
@@ -48,7 +46,6 @@ const defaultSettings: PersistedSettings = {
   dyslexiaFriendly: false,
   reduceMotion: false,
   highlightLinks: false,
-  enhancedFocus: false,
   readingGuide: false,
   cursorLarge: false,
 };
@@ -72,7 +69,6 @@ function extractSettings(state: AccessibilityState): PersistedSettings {
     dyslexiaFriendly,
     reduceMotion,
     highlightLinks,
-    enhancedFocus,
     readingGuide,
     cursorLarge,
   } = state;
@@ -85,7 +81,6 @@ function extractSettings(state: AccessibilityState): PersistedSettings {
     dyslexiaFriendly,
     reduceMotion,
     highlightLinks,
-    enhancedFocus,
     readingGuide,
     cursorLarge,
   };
@@ -126,10 +121,6 @@ export const useAccessibilityStore = createStore<AccessibilityState>((set, get) 
     set((s) => ({ highlightLinks: !s.highlightLinks }));
     persist(extractSettings(get()));
   },
-  toggleEnhancedFocus: () => {
-    set((s) => ({ enhancedFocus: !s.enhancedFocus }));
-    persist(extractSettings(get()));
-  },
   toggleReadingGuide: () => {
     set((s) => ({ readingGuide: !s.readingGuide }));
     persist(extractSettings(get()));
@@ -155,7 +146,6 @@ export const useAccessibilityStore = createStore<AccessibilityState>((set, get) 
     if (s.dyslexiaFriendly) count++;
     if (s.reduceMotion) count++;
     if (s.highlightLinks) count++;
-    if (s.enhancedFocus) count++;
     if (s.readingGuide) count++;
     if (s.cursorLarge) count++;
     return count;

@@ -6,6 +6,7 @@ import Programs from "../src/sections/Programs";
 import Documentation from "../src/sections/Documentation";
 import Contact from "../src/sections/Contact";
 import Footer from "../src/components/Footer";
+import ScrollFadeSection from "../src/components/ScrollFadeSection";
 
 export default function Home() {
   return (
@@ -15,16 +16,35 @@ export default function Home() {
 
       {/* Main Content Sections */}
       <main className="flex flex-col min-h-screen w-full bg-[var(--bg-primary)]">
-        <Hero />
-        <About />
-        <Artworks />
-        <Programs />
-        <Documentation />
-        <Contact />
+        <ScrollFadeSection>
+          <Hero />
+        </ScrollFadeSection>
+
+        <ScrollFadeSection>
+          <About />
+        </ScrollFadeSection>
+
+        <ScrollFadeSection>
+          <Artworks />
+        </ScrollFadeSection>
+
+        <ScrollFadeSection>
+          <Programs />
+        </ScrollFadeSection>
+
+        <ScrollFadeSection>
+          <Documentation />
+        </ScrollFadeSection>
+
+        <ScrollFadeSection>
+          <Contact />
+        </ScrollFadeSection>
       </main>
 
       {/* Footer */}
-      <Footer />
+      <ScrollFadeSection>
+        <Footer />
+      </ScrollFadeSection>
     </>
   );
 }

@@ -162,19 +162,74 @@ body.access-spacing-extra * {
 }
 
 /* 4. High Contrast (Kontras Tinggi) */
+html.access-high-contrast,
 body.access-high-contrast {
   background-color: #000000 !important;
-  color: #FFFF00 !important;
+  color: #ffffff !important;
 }
-body.access-high-contrast * {
-  border-color: #FFFF00 !important;
-  color: #FFFF00 !important;
-  background-color: #000000 !important;
+
+body.access-high-contrast .noise-overlay {
+  display: none !important;
 }
-body.access-high-contrast a,
+
+body.access-high-contrast h1,
+body.access-high-contrast h2,
+body.access-high-contrast h3,
+body.access-high-contrast h4,
+body.access-high-contrast h5,
+body.access-high-contrast h6 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+body.access-high-contrast p,
+body.access-high-contrast span:not(.material-symbols-outlined):not([class*='material-symbols']),
+body.access-high-contrast li,
+body.access-high-contrast dt,
+body.access-high-contrast dd,
+body.access-high-contrast label {
+  color: #ffffff !important;
+}
+
+body.access-high-contrast a {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+}
+
 body.access-high-contrast button {
-  outline: 2px solid #FFFF00 !important;
+  border-color: #ffff00 !important;
 }
+
+body.access-high-contrast input,
+body.access-high-contrast textarea,
+body.access-high-contrast select {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffff00 !important;
+}
+
+body.access-high-contrast input::placeholder,
+body.access-high-contrast textarea::placeholder {
+  color: #ffff00 !important;
+  opacity: 0.85 !important;
+}
+
+body.access-high-contrast img,
+body.access-high-contrast [role="img"],
+body.access-high-contrast [style*="background-image"] {
+  filter: contrast(120%) brightness(105%) !important;
+  background-color: transparent !important;
+}
+
+body.access-high-contrast [class*="border-"] {
+  border-color: #ffffff !important;
+}
+
+body.access-high-contrast #accessibility-panel {
+  background-color: #000000 !important;
+  border: 2px solid #ffff00 !important;
+}
+
 
 /* 5. Grayscale (Hitam Putih)
    Deliberately NOT using `filter` on <body> (or any wrapper): filter on an
@@ -228,6 +283,11 @@ body.access-dyslexia [class*='material-symbols'] {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+  .transform-gpu {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
 }
 
 body.access-reduce-motion *,
@@ -238,6 +298,13 @@ body.access-reduce-motion *::after {
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
 }
+
+body.access-reduce-motion .transform-gpu {
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
 
 /* 8. Highlight Links (Sorot Tautan) */
 body.access-highlight-links a {
@@ -257,10 +324,49 @@ body.access-focus *:focus-visible {
 }
 
 /* 10. Cursor Besar */
+html.access-cursor-large,
 body.access-cursor-large,
 body.access-cursor-large * {
-  cursor: crosshair !important;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 32 32'%3E%3Cpath d='M3 3 L12 29 L16 19 L26 16 Z' fill='%230B0B0B' stroke='%23FFFFFF' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M4.5 5.5 L11.5 25.5 L14.5 18 L23 15.5 Z' fill='%23000000'/%3E%3C/svg%3E") 3 3, auto !important;
 }
+
+html.access-cursor-large a,
+html.access-cursor-large a *,
+html.access-cursor-large button,
+html.access-cursor-large button *,
+html.access-cursor-large [role="button"],
+html.access-cursor-large [role="button"] *,
+html.access-cursor-large input,
+html.access-cursor-large textarea,
+html.access-cursor-large select,
+html.access-cursor-large [tabindex],
+body.access-cursor-large a,
+body.access-cursor-large a *,
+body.access-cursor-large button,
+body.access-cursor-large button *,
+body.access-cursor-large [role="button"],
+body.access-cursor-large [role="button"] *,
+body.access-cursor-large input,
+body.access-cursor-large textarea,
+body.access-cursor-large select,
+body.access-cursor-large [tabindex] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 32 32'%3E%3Cpath d='M10 2 C9 2 8 3 8 4 L8 16 L6.5 14.5 C5.5 13.5 4 13.5 3 14.5 C2 15.5 2 17 3 18 L10.5 27 C12 28.8 14 29.8 16 29.8 L23 29.8 C25.8 29.8 28 27.6 28 24.8 L28 16.5 C28 15.4 27.1 14.5 26 14.5 C25.7 14.5 25.4 14.6 25.1 14.7 C24.8 13.8 24 13.2 23 13.2 C22.6 13.2 22.3 13.3 22 13.5 C21.6 12.6 20.8 12 19.8 12 C19.6 12 19.4 12 19.2 12.1 L19.2 4 C19.2 2.9 18.3 2 17.2 2 C16.1 2 15.2 2.9 15.2 4 L15.2 12 L13.8 12 L13.8 4 C13.8 2.9 12.9 2 11.8 2 L10 2 Z' fill='%230B0B0B' stroke='%23FFFFFF' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 10 2, pointer !important;
+}
+
+body.access-high-contrast.access-cursor-large,
+body.access-high-contrast.access-cursor-large * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 32 32'%3E%3Cpath d='M3 3 L12 29 L16 19 L26 16 Z' fill='%23000000' stroke='%23FFFF00' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, auto !important;
+}
+
+body.access-high-contrast.access-cursor-large a,
+body.access-high-contrast.access-cursor-large a *,
+body.access-high-contrast.access-cursor-large button,
+body.access-high-contrast.access-cursor-large button *,
+body.access-high-contrast.access-cursor-large [role="button"],
+body.access-high-contrast.access-cursor-large [role="button"] * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 32 32'%3E%3Cpath d='M10 2 C9 2 8 3 8 4 L8 16 L6.5 14.5 C5.5 13.5 4 13.5 3 14.5 C2 15.5 2 17 3 18 L10.5 27 C12 28.8 14 29.8 16 29.8 L23 29.8 C25.8 29.8 28 27.6 28 24.8 L28 16.5 C28 15.4 27.1 14.5 26 14.5 C25.7 14.5 25.4 14.6 25.1 14.7 C24.8 13.8 24 13.2 23 13.2 C22.6 13.2 22.3 13.3 22 13.5 C21.6 12.6 20.8 12 19.8 12 C19.6 12 19.4 12 19.2 12.1 L19.2 4 C19.2 2.9 18.3 2 17.2 2 C16.1 2 15.2 2.9 15.2 4 L15.2 12 L13.8 12 L13.8 4 C13.8 2.9 12.9 2 11.8 2 L10 2 Z' fill='%23000000' stroke='%23FFFF00' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 10 2, pointer !important;
+}
+
 
 /* Keyframe animations */
 @keyframes fadeIn {

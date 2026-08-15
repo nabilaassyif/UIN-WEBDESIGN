@@ -183,27 +183,15 @@ export default function AccessibilityPanel({
 
         <div className="h-px bg-[var(--border-color)]" />
 
-        {/* GERAKAN & NAVIGASI */}
+        {/* NAVIGASI & ALAT BANTU */}
         <div>
           <SectionHeading icon={SECTIONS.motion} label={t('access.sectionMotion')} />
           <div className="space-y-1.5">
-            <ToggleButton
-              label={t('access.reduceMotion')}
-              description={t('access.reduceMotionDesc')}
-              isActive={store.reduceMotion}
-              onClick={() => store.toggleReduceMotion()}
-            />
             <ToggleButton
               label={t('access.highlightLinks')}
               description={t('access.highlightLinksDesc')}
               isActive={store.highlightLinks}
               onClick={() => store.toggleHighlightLinks()}
-            />
-            <ToggleButton
-              label={t('access.enhancedFocus')}
-              description={t('access.enhancedFocusDesc')}
-              isActive={store.enhancedFocus}
-              onClick={() => store.toggleEnhancedFocus()}
             />
             <ToggleButton
               label={t('access.readingGuide')}

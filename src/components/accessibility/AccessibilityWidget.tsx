@@ -56,7 +56,6 @@ export default function AccessibilityWidget() {
     if (store.dyslexiaFriendly) body.classList.add('access-dyslexia');
     if (store.reduceMotion) body.classList.add('access-reduce-motion');
     if (store.highlightLinks) body.classList.add('access-highlight-links');
-    if (store.enhancedFocus) body.classList.add('access-focus');
     if (store.readingGuide) body.classList.add('access-reading-guide');
     if (store.cursorLarge) body.classList.add('access-cursor-large');
   }, [store]);

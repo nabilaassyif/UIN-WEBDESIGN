@@ -78,6 +78,36 @@
   color-scheme: light;
 }
 
+/* High Contrast Override */
+html.access-high-contrast,
+body.access-high-contrast,
+.access-high-contrast {
+  --bg-primary: #000000 !important;
+  --bg-secondary: #000000 !important;
+  --bg-tertiary: #080808 !important;
+  --bg-elevated: #000000 !important;
+  --bg-input: #000000 !important;
+
+  --border-color: #ffffff !important;
+  --border-color-strong: #ffff00 !important;
+
+  --text-primary: #ffffff !important;
+  --text-secondary: #ffff00 !important;
+  --text-muted: #ffff00 !important;
+
+  --accent: #ffff00 !important;
+  --accent-contrast: #000000 !important;
+
+  --overlay-scrim: rgba(0, 0, 0, 0.98) !important;
+
+  --scrollbar-track: #000000 !important;
+  --scrollbar-thumb: #ffff00 !important;
+  --scrollbar-thumb-hover: #ffffff !important;
+
+  color-scheme: dark !important;
+}
+
+
 /* Smooth, non-jarring transition when the theme changes */
 html,
 body,

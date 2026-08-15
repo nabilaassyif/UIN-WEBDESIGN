@@ -47,7 +47,7 @@ export default function RootLayout({
 
           <div
             id="reading-guide-line"
-            className="fixed left-0 right-0 h-[3px] bg-secondary/80 shadow-[0_0_8px_rgba(255,181,159,0.8)] z-[9999] pointer-events-none hidden transition-all duration-75"
+            className="fixed left-0 right-0 h-[3px] bg-[var(--accent)] shadow-[0_0_8px_rgba(255,181,159,0.8)] z-[9999] pointer-events-none hidden transition-all duration-75"
             aria-hidden="true"
           />
 
