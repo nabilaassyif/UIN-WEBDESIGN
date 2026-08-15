@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-// Menggunakan path yang akurat keluar dari folder app lalu masuk ke src
 import AccessibilityWidget from "../src/components/accessibility/AccessibilityWidget";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-});
+import { LanguageProvider } from "../src/lib/i18n/LanguageContext";
 
 export const metadata: Metadata = {
-  title: "KALIMANTAN - Craft & Heritage",
-  description: "Warisan yang Dibuat untuk Masa Kini",
+  title: "KALIMANTAN — Craft & Heritage | Warisan yang Dibuat untuk Masa Kini",
+  description:
+    "Eksplorasi mahakarya warisan budaya, anyaman rotan, ukiran kayu ulin, kain tenun, dan kearifan leluhur Dayak Kalimantan yang terkurasi secara kontemporer.",
+  keywords: [
+    "Kalimantan",
+    "Dayak",
+    "Craft",
+    "Heritage",
+    "Anyaman Rotan",
+    "Kayu Ulin",
+    "Tenun Ikat",
+    "Mandau",
+    "Budaya Nusantara",
+  ],
+  authors: [{ name: "Kalimantan Cultural Heritage Organization" }],
 };
 
 export default function RootLayout({
@@ -25,28 +27,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="dark">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
+    <html lang="id" className="scroll-smooth" suppressHydrationWarning>
+      <body className="bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased relative min-h-screen">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('kalimantan-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`,
+          }}
         />
-      </head>
-      <body
-        className={`${inter.variable} ${playfair.variable} bg-background text-on-background antialiased selection:bg-secondary-container selection:text-on-secondary-container relative`}
-      >
-        <div className="noise-overlay"></div>
-        
-        {children}
+        <LanguageProvider>
+          <div className="noise-overlay" aria-hidden="true" />
 
-        {/* Widget Aksesibilitas */}
-        <AccessibilityWidget />
-        
-        {/* Elemen pembantu untuk fitur Reading Guide */}
-        <div 
-          id="reading-guide-line" 
-          className="fixed left-0 right-0 h-[4px] bg-secondary z-[9999] pointer-events-none hidden" 
-        />
+          {children}
+
+          <AccessibilityWidget />
+
+          <div
+            id="reading-guide-line"
+            className="fixed left-0 right-0 h-[3px] bg-secondary/80 shadow-[0_0_8px_rgba(255,181,159,0.8)] z-[9999] pointer-events-none hidden transition-all duration-75"
+            aria-hidden="true"
+          />
+        </LanguageProvider>
       </body>
     </html>
   );

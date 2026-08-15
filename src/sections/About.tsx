@@ -1,86 +1,76 @@
+'use client';
+
+import { useLanguage } from '../lib/i18n/LanguageContext';
+
 export default function AboutSection() {
+  const { t } = useLanguage();
+
   const stats = [
-    { number: '6', label: 'Wilayah Adat', desc: 'Tersebar di jantung hutan Kalimantan' },
-    { number: '100+', label: 'Karya Terkurasi', desc: 'Mahakarya bernilai seni tinggi' },
-    { number: '3', label: 'Generasi', desc: 'Pewarisan teknik tradisi murni' },
+    { number: '6', label: t('about.stat1Label') },
+    { number: '100+', label: t('about.stat2Label') },
+    { number: '3', label: t('about.stat3Label') },
   ];
 
   return (
     <section
-      className="py-24 md:py-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
+      className="relative w-full min-w-full overflow-x-clip border-t border-[var(--border-color)] py-24 md:py-36"
       id="tentang-kami"
     >
-      {/* Bagian Atas: Header & Narasi Utama (Layout Asimetris) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20">
-        
-        {/* Kolom Kiri: Judul Besar */}
-        <div className="lg:col-span-5">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-[1px] bg-secondary" />
-            <span className="font-label-caps text-label-caps text-secondary tracking-[0.3em] uppercase">
-              Tentang Kami
-            </span>
-          </div>
-          <h2 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary leading-tight">
-            Menjaga Kebijaksanaan Leluhur melalui Sentuhan Tangan.
-          </h2>
-        </div>
+      <div aria-hidden="true" className="absolute inset-0 bg-[var(--bg-primary)]" />
+      <div className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+          {/* Left Column: Image & Floating Stat Card */}
+          <div className="lg:col-span-6 relative">
+            <div className="relative aspect-[4/5] w-full overflow-hidden border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
+              <div
+                role="img"
+                aria-label="Detail anyaman rotan tradisional Kalimantan"
+                className="w-full h-full bg-cover bg-center object-cover filter brightness-90 hover:brightness-100 transition-all duration-700"
+                style={{
+                  backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuDP2vcPKeFLeYYmgA6toV2sx3DxDAVXAD3AmX9AQ-DoM3z8M048lt8KPLdfBLPFS9lyOF0epnFXzCzEAEVT8v-OlyqZ-2pE3RmjjjFbaaFQAsSZlHdJPOGMSHb3kwMjhzHaoyI7relNrZ2EwLd_w1NuKe4_eH9ourHZces8Eo7-yLWl1FcsqRZnvaruDIBqJCNORp9Bp-ek-cj-3B7oANoD2gbWgB8ZjpAf1NAmC6SLCgxdFVF9HX8r')`,
+                }}
+              />
+            </div>
 
-        {/* Kolom Kanan: Paragraf Penjelasan */}
-        <div className="lg:col-span-7 flex flex-col justify-center space-y-6 pt-2">
-          <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-            Our organization bridges the raw, organic soul of Kalimantan craftsmanship with the
-            disciplined aesthetic of a contemporary gallery. We believe that true luxury lies in time,
-            patience, and the profound connection between the artisan and the earth.
-          </p>
-          <p className="font-body-lg text-body-lg text-on-surface-variant/80 leading-relaxed">
-            Every piece tells a story of the forest, translated through generations of unspoken
-            knowledge. We exist to ensure these stories continue to be told, honored, and integrated
-            into modern spaces with absolute dignity.
-          </p>
-        </div>
-      </div>
-
-      {/* Bagian Bawah: Showcase Gambar Lebar & Grid Statistik Modern */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        {/* Gambar Utama dengan Lebar Penuh (Landscape/Cinematic) */}
-        <div className="lg:col-span-7 relative group">
-          <div
-            aria-hidden="true"
-            className="w-full aspect-[16/10] bg-cover bg-center object-cover border border-white/10 filter grayscale-[15%] group-hover:grayscale-0 transition-all duration-700 shadow-2xl"
-            style={{
-              backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuDP2vcPKeFLeYYmgA6toV2sx3DxDAVXAD3AmX9AQ-DoM3z8M048lt8KPLdfBLPFS9lyOF0epnFXzCzEAEVT8v-OlyqZ-2pE3RmjjjFbaaFQAsSZlHdJPOGMSHb3kwMjhzHaoyI7relNrZ2EwLd_w1NuKe4_eH9ourHZces8Eo7-yLWl1FcsqRZnvaruDIBqJCNORp9Bp-ek-cj-3B7oANoD2gbWgB8ZjpAf1NAmC6SLCgxdFVF9HX8r')`,
-            }}
-          />
-          {/* Subtle Frame Accent */}
-          <div className="absolute inset-0 border border-white/5 pointer-events-none m-3" />
-        </div>
-
-        {/* Statistik Berjajar ke Bawah yang Elegan */}
-        <div className="lg:col-span-5 flex flex-col justify-between space-y-8 lg:pl-8">
-          {stats.map((stat, idx) => (
-            <div 
-              key={stat.label} 
-              className={`flex items-start gap-6 ${
-                idx !== stats.length - 1 ? 'pb-8 border-b border-white/10' : ''
-              }`}
-            >
-              <span className="font-display-lg-mobile text-4xl md:text-5xl text-secondary font-light min-w-[70px]">
-                {stat.number}
-              </span>
-              <div>
-                <h3 className="font-label-caps text-label-caps text-primary tracking-wider mb-1 uppercase">
-                  {stat.label}
-                </h3>
-                <p className="font-body-lg text-xs md:text-sm text-on-surface-variant/70">
-                  {stat.desc}
-                </p>
+            {/* Floating Stat Card */}
+            <div className="absolute -bottom-6 -right-3 sm:-bottom-8 sm:right-6 bg-[var(--bg-elevated)] border border-[var(--border-color)] px-8 py-6 shadow-2xl z-10 min-w-[170px]">
+              <div className="font-serif text-3xl sm:text-4xl font-normal text-[var(--accent)] mb-1">
+                50+
+              </div>
+              <div className="text-[11px] uppercase tracking-[0.14em] text-[var(--text-secondary)] font-medium">
+                {t('about.statMaster')}
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
+          {/* Right Column: Heading, Paragraphs & Stats */}
+          <div className="lg:col-span-6 flex flex-col justify-center pt-8 lg:pt-0">
+            {/* Main Headline */}
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[var(--text-primary)] leading-[1.2] mb-8">
+              {t('about.heading')}
+            </h2>
+
+            {/* Paragraphs */}
+            <div className="space-y-6 text-sm sm:text-base text-[var(--text-secondary)] font-light leading-relaxed mb-12">
+              <p>{t('about.p1')}</p>
+              <p>{t('about.p2')}</p>
+            </div>
+
+            {/* Stats Row */}
+            <div className="pt-8 border-t border-[var(--border-color)] grid grid-cols-3 gap-6">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-serif text-3xl sm:text-4xl font-normal text-[var(--text-primary)] mb-1">
+                    {stat.number}
+                  </div>
+                  <div className="text-[11px] sm:text-xs text-[var(--text-secondary)] font-light">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

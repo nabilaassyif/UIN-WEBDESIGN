@@ -2,35 +2,57 @@
 
 interface ToggleButtonProps {
   label: string;
+  description?: string;
   isActive: boolean;
   onClick: () => void;
 }
 
-export default function ToggleButton({ label, isActive, onClick }: ToggleButtonProps) {
+export default function ToggleButton({
+  label,
+  description,
+  isActive,
+  onClick,
+}: ToggleButtonProps) {
   return (
     <button
-      className={`w-full flex items-center justify-between p-3 border rounded hover:border-secondary hover:text-secondary transition-colors font-body-md text-sm min-h-[44px] group ${
-        isActive ? 'border-secondary text-secondary' : 'border-white/10'
-      }`}
-      onClick={onClick}
       type="button"
+      onClick={onClick}
       aria-pressed={isActive}
+      className={`w-full flex items-center justify-between gap-3 p-3.5 rounded-xl border text-left transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
+        isActive
+          ? 'border-[var(--accent)]/60 bg-[var(--accent)]/10 shadow-[inset_0_0_0_1px_rgba(255,179,159,0.08)]'
+          : 'border-[var(--border-color)] bg-[var(--bg-input)] hover:border-[var(--border-color-strong)] hover:bg-[var(--bg-secondary)]'
+      }`}
     >
-      <span>{label}</span>
-      
-      {/* Wadah Toggle */}
-      <div
-        className={`w-10 h-5 rounded-full relative transition-colors duration-300 ${
-          isActive ? 'bg-secondary' : 'bg-surface-container'
+      <span className="min-w-0">
+        <span
+          className={`block text-xs font-medium leading-snug ${
+            isActive ? 'text-[var(--accent)]' : 'text-[var(--text-primary)]'
+          }`}
+        >
+          {label}
+        </span>
+        {description && (
+          <span className="block text-[10px] text-[var(--text-muted)] mt-1 font-light leading-snug">
+            {description}
+          </span>
+        )}
+      </span>
+
+      <span
+        aria-hidden="true"
+        className={`relative shrink-0 w-10 h-[22px] rounded-full border transition-colors ${
+          isActive
+            ? 'bg-[var(--accent)] border-[var(--accent)]'
+            : 'bg-[var(--bg-tertiary)] border-[var(--border-color-strong)]'
         }`}
       >
-        {/* Lingkaran (Knob) Toggle */}
-        <div
-          className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 ${
-            isActive ? 'translate-x-5' : 'translate-x-0'
+        <span
+          className={`absolute top-[2px] left-[2px] w-4 h-4 rounded-full bg-[var(--bg-elevated)] shadow-sm transition-transform duration-200 ${
+            isActive ? 'translate-x-[18px]' : 'translate-x-0'
           }`}
         />
-      </div>
+      </span>
     </button>
   );
 }

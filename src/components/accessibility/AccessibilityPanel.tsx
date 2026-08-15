@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAccessibilityStore } from '../../lib/accessibilityStore';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 import TextSizeGroup from './TextSizeGroup';
 import ToggleButton from './ToggleButton';
 
@@ -10,13 +11,35 @@ interface AccessibilityPanelProps {
   onClose: () => void;
 }
 
+// Each section gets one glyph + one job — icons carry meaning here, not decoration.
+const SECTIONS = {
+  typography: 'text_fields',
+  contrast: 'contrast',
+  motion: 'motion_photos_off',
+} as const;
+
+function SectionHeading({ icon, label }: { icon: string; label: string }) {
+  return (
+    <div className="flex items-center gap-2 mb-3">
+      <span className="w-5 h-5 rounded-full bg-[var(--accent)]/12 text-[var(--accent)] flex items-center justify-center shrink-0">
+        <span className="material-symbols-outlined text-[13px]">{icon}</span>
+      </span>
+      <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-[0.18em]">
+        {label}
+      </span>
+      <div className="flex-1 h-px bg-[var(--border-color)]" />
+    </div>
+  );
+}
+
 export default function AccessibilityPanel({
   isOpen,
   onClose,
 }: AccessibilityPanelProps) {
   const store = useAccessibilityStore();
+  const { t } = useLanguage();
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  // Close on Escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -24,148 +47,165 @@ export default function AccessibilityPanel({
       }
     };
 
+    const handleClickOutside = (e: MouseEvent) => {
+      const btn = document.getElementById('accessibility-btn');
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(e.target as Node) &&
+        btn &&
+        !btn.contains(e.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
-    return () => document.removeEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [isOpen, onClose]);
-
-  // Apply accessibility classes to body
-  useEffect(() => {
-    const body = document.body;
-
-    // Remove all accessibility classes
-    body.className = body.className
-      .split(' ')
-      .filter((c) => !c.startsWith('access-'))
-      .join(' ');
-
-    // Add active classes
-    if (store.textSize !== 'md') body.classList.add(`access-text-${store.textSize}`);
-    if (store.lineHeight !== 'normal') body.classList.add(`access-line-height-${store.lineHeight}`);
-    if (store.letterSpacing !== 'normal') body.classList.add(`access-spacing-${store.letterSpacing}`);
-
-    if (store.highContrast) body.classList.add('access-high-contrast');
-    if (store.grayscale) body.classList.add('access-grayscale');
-    if (store.dyslexiaFriendly) body.classList.add('access-dyslexia');
-    if (store.reduceMotion) body.classList.add('access-reduce-motion');
-    if (store.highlightLinks) body.classList.add('access-highlight-links');
-    if (store.enhancedFocus) body.classList.add('access-focus');
-    if (store.readingGuide) body.classList.add('access-reading-guide');
-    if (store.cursorLarge) body.classList.add('access-cursor-large');
-  }, [store]);
 
   if (!isOpen) return null;
 
   return (
-<div
-  aria-label="Accessibility Settings"
-  className="absolute bottom-20 right-0 w-[calc(100vw-2rem)] sm:w-[400px] max-h-[75vh] overflow-y-auto bg-surface-container-highest border border-white/10 rounded-xl shadow-2xl p-4 sm:p-6 z-50"
-  role="dialog"
->
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/5">
-        <h3 className="font-headline-md text-lg text-primary m-0">Accessibility</h3>
+    <div
+      ref={panelRef}
+      aria-label={t('access.title')}
+      aria-modal="true"
+      className="fixed z-[9995] bottom-[80px] left-3 right-3 sm:left-auto sm:right-6 sm:bottom-[90px] sm:w-[392px] max-h-[78vh] overflow-y-auto overscroll-contain bg-[var(--bg-elevated)] border border-[var(--border-color-strong)] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.28)] animate-fade-in"
+      id="accessibility-panel"
+      role="dialog"
+    >
+      {/* Header — sticky so orientation never scrolls out of view */}
+      <div className="sticky top-0 z-10 flex justify-between items-start gap-3 px-5 pt-5 pb-3.5 bg-[var(--bg-elevated)] border-b border-[var(--border-color)]">
+        <div className="flex items-start gap-3">
+          <span className="w-9 h-9 shrink-0 rounded-xl bg-[var(--accent)]/12 text-[var(--accent)] flex items-center justify-center">
+            <span className="material-symbols-outlined text-[20px]">accessibility_new</span>
+          </span>
+          <div>
+            <h3 className="font-serif text-base font-bold text-[var(--text-primary)] m-0 tracking-wide">
+              {t('access.title')}
+            </h3>
+            <p className="text-[11px] text-[var(--text-muted)] m-0 mt-0.5 font-light leading-snug">
+              {t('access.subtitle')}
+            </p>
+          </div>
+        </div>
+
         <button
-          aria-label="Close Accessibility Panel"
-          className="text-on-surface-variant hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-secondary rounded p-1"
+          aria-label={t('access.close')}
+          className="w-8 h-8 shrink-0 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
           onClick={onClose}
           type="button"
         >
-          <span className="material-symbols-outlined">close</span>
+          <span className="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
 
-      <div className="space-y-8">
-        {/* ========== TEXT SETTINGS ========== */}
+      <div className="px-5 pb-5 pt-4 space-y-6">
+        {/* Section 1: TIPOGRAFI & SPASI */}
         <div>
-          <h4 className="font-label-caps text-label-caps text-secondary mb-4">Text</h4>
+          <SectionHeading icon={SECTIONS.typography} label={t('access.sectionTypography')} />
 
-          <TextSizeGroup
-            label="Text Size"
-            options={[
-              { value: 'sm', label: 'A-' },
-              { value: 'md', label: 'A' },
-              { value: 'lg', label: 'A+' },
-            ]}
-            selectedValue={store.textSize}
-            onSelect={(val: string) => store.setTextSize(val as 'sm' | 'md' | 'lg')}
-          />
+          <div className="space-y-3">
+            <TextSizeGroup
+              label={t('access.fontSize')}
+              options={[
+                { value: 'sm', label: 'A−', subLabel: t('access.fontSizeSmall') },
+                { value: 'md', label: 'A', subLabel: t('access.fontSizeMedium') },
+                { value: 'lg', label: 'A+', subLabel: t('access.fontSizeLarge') },
+              ]}
+              selectedValue={store.textSize}
+              onSelect={(val: string) => store.setTextSize(val as 'sm' | 'md' | 'lg')}
+            />
 
-          <TextSizeGroup
-            label="Line Height"
-            options={[
-              { value: 'normal', label: 'Normal' },
-              { value: 'relaxed', label: 'Relaxed' },
-              { value: 'extra', label: 'Extra' },
-            ]}
-            selectedValue={store.lineHeight}
-            onSelect={(val: string) => store.setLineHeight(val as 'normal' | 'relaxed' | 'extra')}
-          />
+            <TextSizeGroup
+              label={t('access.lineHeight')}
+              options={[
+                { value: 'normal', label: t('access.lineHeightNormal') },
+                { value: 'relaxed', label: t('access.lineHeightRelaxed') },
+                { value: 'extra', label: t('access.lineHeightExtra') },
+              ]}
+              selectedValue={store.lineHeight}
+              onSelect={(val: string) => store.setLineHeight(val as 'normal' | 'relaxed' | 'extra')}
+            />
 
-          <TextSizeGroup
-            label="Letter Spacing"
-            options={[
-              { value: 'normal', label: 'Normal' },
-              { value: 'wide', label: 'Wide' },
-              { value: 'extra', label: 'Extra' },
-            ]}
-            selectedValue={store.letterSpacing}
-            onSelect={(val: string) => store.setLetterSpacing(val as 'normal' | 'wide' | 'extra')}
-          />
+            <TextSizeGroup
+              label={t('access.letterSpacing')}
+              options={[
+                { value: 'normal', label: t('access.lineHeightNormal') },
+                { value: 'wide', label: t('access.lineHeightRelaxed') },
+                { value: 'extra', label: t('access.lineHeightExtra') },
+              ]}
+              selectedValue={store.letterSpacing}
+              onSelect={(val: string) => store.setLetterSpacing(val as 'normal' | 'wide' | 'extra')}
+            />
+          </div>
         </div>
 
-        {/* ========== VISUAL SETTINGS ========== */}
+        {/* Section 2: KONTRAS & WARNA */}
         <div>
-          <h4 className="font-label-caps text-label-caps text-secondary mb-4">Visual</h4>
-          <div className="space-y-3">
+          <SectionHeading icon={SECTIONS.contrast} label={t('access.sectionContrast')} />
+
+          <div className="space-y-2">
             <ToggleButton
-              label="High Contrast"
+              label={t('access.highContrast')}
+              description={t('access.highContrastDesc')}
               isActive={store.highContrast}
               onClick={() => store.toggleHighContrast()}
             />
             <ToggleButton
-              label="Grayscale"
+              label={t('access.grayscale')}
+              description={t('access.grayscaleDesc')}
               isActive={store.grayscale}
               onClick={() => store.toggleGrayscale()}
             />
             <ToggleButton
-              label="Dyslexia Friendly"
+              label={t('access.dyslexia')}
+              description={t('access.dyslexiaDesc')}
               isActive={store.dyslexiaFriendly}
               onClick={() => store.toggleDyslexiaFriendly()}
             />
           </div>
         </div>
 
-        {/* ========== MOTION & NAVIGATION ========== */}
+        {/* Section 3: GERAKAN & NAVIGASI */}
         <div>
-          <h4 className="font-label-caps text-label-caps text-secondary mb-4">
-            Motion & Navigation
-          </h4>
-          <div className="space-y-3">
+          <SectionHeading icon={SECTIONS.motion} label={t('access.sectionMotion')} />
+
+          <div className="space-y-2">
             <ToggleButton
-              label="Reduce Motion"
+              label={t('access.reduceMotion')}
+              description={t('access.reduceMotionDesc')}
               isActive={store.reduceMotion}
               onClick={() => store.toggleReduceMotion()}
             />
             <ToggleButton
-              label="Highlight Links"
+              label={t('access.highlightLinks')}
+              description={t('access.highlightLinksDesc')}
               isActive={store.highlightLinks}
               onClick={() => store.toggleHighlightLinks()}
             />
             <ToggleButton
-              label="Enhanced Focus"
+              label={t('access.enhancedFocus')}
+              description={t('access.enhancedFocusDesc')}
               isActive={store.enhancedFocus}
               onClick={() => store.toggleEnhancedFocus()}
             />
             <ToggleButton
-              label="Reading Guide"
+              label={t('access.readingGuide')}
+              description={t('access.readingGuideDesc')}
               isActive={store.readingGuide}
               onClick={() => store.toggleReadingGuide()}
             />
             <ToggleButton
-              label="Cursor Size (Large)"
+              label={t('access.cursorLarge')}
+              description={t('access.cursorLargeDesc')}
               isActive={store.cursorLarge}
               onClick={() => store.toggleCursorLarge()}
             />
@@ -173,17 +213,17 @@ export default function AccessibilityPanel({
         </div>
       </div>
 
-      {/* Reset Button */}
-      <div className="mt-8 pt-6 border-t border-white/5">
+      {/* Footer Reset — sticky, separated, and unambiguous about the action's scope */}
+      <div className="sticky bottom-0 px-5 pt-3.5 pb-5 bg-[var(--bg-elevated)] border-t border-[var(--border-color)]">
         <button
-          className="w-full py-3 bg-primary text-background font-label-caps text-label-caps rounded hover:bg-primary/90 transition-colors min-h-[44px]"
-          onClick={() => {
-            store.resetAll();
-            onClose();
-          }}
+          className="group w-full py-2.5 bg-[var(--bg-input)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--accent)]/40 text-[var(--text-secondary)] hover:text-[var(--accent)] text-xs font-medium tracking-wider uppercase rounded-lg transition-all flex items-center justify-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
+          onClick={() => store.resetAll()}
           type="button"
         >
-          Reset All
+          <span className="material-symbols-outlined text-[15px] transition-transform duration-500 group-hover:-rotate-180">
+            restart_alt
+          </span>
+          <span>{t('access.reset')}</span>
         </button>
       </div>
     </div>

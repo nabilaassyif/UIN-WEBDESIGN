@@ -1,26 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+@import url("https://fonts.cdnfonts.com/css/opendyslexic");
+@import "../src/styles/theme.css";
 @import "tailwindcss";
 
-@theme {
-  /* Palet Warna Kalimantan */
-  --color-background: #131313;
-  --color-on-background: #e5e2e1;
-  --color-primary: #ffffff;
-  --color-secondary: #ffb59f;
-  --color-surface-variant: #353535;
-  --color-on-surface-variant: #c8c7be;
-  --color-secondary-container: #733521;
-  --color-on-secondary-container: #f69f85;
-  --color-surface-container-lowest: #0e0e0e;
-  --color-surface-container: #20201f;
-  
-  /* Spacing Khusus */
-  --spacing-margin-mobile: 20px;
-  --spacing-gutter: 24px;
-  --spacing-margin-desktop: 80px;
-  --spacing-section-gap: 160px;
-  --spacing-container-max: 1440px;
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
 
-  /* Konfigurasi Font Family (Menyambung ke layout.tsx) */
+@theme {
+  --color-background: var(--bg-primary);
+  --color-on-background: #F5F2ED;
+  --color-primary: #F5F2ED;
+  --color-secondary: #FFB39F;
+  --color-text-secondary: #B5B1AC;
+  --color-text-muted: #85817D;
+  --color-surface-variant: #1F1F1F;
+  --color-on-surface-variant: #B5B1AC;
+  --color-secondary-container: #331A14;
+  --color-on-secondary-container: #FFB39F;
+  
+  --color-surface-container-lowest: #060606;
+  --color-surface-container-low: #101010;
+  --color-surface-container: #141414;
+  --color-surface-container-high: #181818;
+  --color-surface-container-highest: #222222;
+  --color-surface-card: #151515;
+
+  --color-accent: #FFB39F;
+  --color-border-subtle: rgba(255, 255, 255, 0.10);
+  --color-border-hover: rgba(255, 255, 255, 0.25);
+
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-margin-desktop: 5rem;
+  --spacing-section-gap: 7.5rem;
+  --spacing-container-max: 1360px;
+
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-playfair: "Playfair Display", "Georgia", "Cambria", "Times New Roman", serif;
   --font-body-lg: var(--font-inter);
   --font-display-lg-mobile: var(--font-playfair);
   --font-headline-md: var(--font-playfair);
@@ -29,41 +64,50 @@
   --font-display-lg: var(--font-playfair);
   --font-headline-lg-mobile: var(--font-playfair);
   --font-body-md: var(--font-inter);
+}
 
-  /* Konfigurasi Ukuran Teks (Size & Line Height) */
-  --text-body-lg: 18px;
-  --text-body-lg--line-height: 32px;
-  --text-display-lg-mobile: 48px;
-  --text-display-lg-mobile--line-height: 54px;
-  --text-display-lg-mobile--letter-spacing: -0.01em;
-  --text-headline-md: 32px;
-  --text-headline-md--line-height: 42px;
-  --text-headline-lg: 48px;
-  --text-headline-lg--line-height: 56px;
-  --text-label-caps: 12px;
-  --text-label-caps--line-height: 16px;
-  --text-label-caps--letter-spacing: 0.15em;
-  --text-display-lg: 84px;
-  --text-display-lg--line-height: 92px;
-  --text-display-lg--letter-spacing: -0.02em;
-  --text-headline-lg-mobile: 32px;
-  --text-headline-lg-mobile--line-height: 40px;
-  --text-body-md: 16px;
-  --text-body-md--line-height: 28px;
+:root {
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-playfair: "Playfair Display", "Georgia", "Cambria", "Times New Roman", serif;
 }
 
 @layer base {
-  body {
-    background-color: var(--color-background);
-    color: var(--color-on-background);
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  html {
-    scroll-behavior: smooth;
+  * {
+    box-sizing: border-box;
   }
 
-  /* Efek Noise Overlay dari HTML asli */
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+
   .noise-overlay {
     position: fixed;
     top: 0;
@@ -72,32 +116,41 @@
     height: 100vh;
     pointer-events: none;
     z-index: 9998;
-    opacity: 0.03;
+    opacity: 0.02;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 }
+
+/* Focus indicator for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #FFB39F !important;
+  outline-offset: 3px !important;
+}
+
 /* ========================================== */
-/* ATURAN UTAMA FITUR AKSESIBILITAS           */
+/* ATURAN FITUR AKSESIBILITAS                 */
 /* ========================================== */
 
 /* 1. Ukuran Teks (Text Size) */
 body.access-text-sm {
-  font-size: 14px !important;
+  font-size: 88% !important;
 }
 body.access-text-lg {
-  font-size: 20px !important;
+  font-size: 116% !important;
 }
 
 /* 2. Spasi Baris (Line Height) */
 body.access-line-height-relaxed p,
 body.access-line-height-relaxed span,
-body.access-line-height-relaxed a {
-  line-height: 1.8 !important;
+body.access-line-height-relaxed a,
+body.access-line-height-relaxed li {
+  line-height: 1.95 !important;
 }
 body.access-line-height-extra p,
 body.access-line-height-extra span,
-body.access-line-height-extra a {
-  line-height: 2.2 !important;
+body.access-line-height-extra a,
+body.access-line-height-extra li {
+  line-height: 2.35 !important;
 }
 
 /* 3. Spasi Huruf (Letter Spacing) */
@@ -105,16 +158,22 @@ body.access-spacing-wide * {
   letter-spacing: 0.05em !important;
 }
 body.access-spacing-extra * {
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.12em !important;
 }
 
 /* 4. High Contrast (Kontras Tinggi) */
 body.access-high-contrast {
   background-color: #000000 !important;
-  color: #ffff00 !important;
+  color: #FFFF00 !important;
 }
 body.access-high-contrast * {
-  border-color: #ffff00 !important;
+  border-color: #FFFF00 !important;
+  color: #FFFF00 !important;
+  background-color: #000000 !important;
+}
+body.access-high-contrast a,
+body.access-high-contrast button {
+  outline: 2px solid #FFFF00 !important;
 }
 
 /* 5. Grayscale (Hitam Putih) */
@@ -122,15 +181,39 @@ body.access-grayscale {
   filter: grayscale(100%) !important;
 }
 
-/* 6. Dyslexia Friendly (Ramah Disleksia) */
-body.access-dyslexia * {
-  font-family: Arial, Helvetica, sans-serif !important;
-  word-spacing: 0.2em !important;
+/* 6. Dyslexia Friendly (OpenDyslexic) */
+body.access-dyslexia {
+  --font-inter: 'OpenDyslexic', 'OpenDyslexicAlta', 'Comic Sans MS', sans-serif;
+  --font-playfair: 'OpenDyslexic', 'OpenDyslexicAlta', 'Comic Sans MS', sans-serif;
+  font-family: 'OpenDyslexic', 'OpenDyslexicAlta', 'Comic Sans MS', sans-serif !important;
 }
 
+body.access-dyslexia *:not(.material-symbols-outlined):not([class*='material-symbols']) {
+  font-family: 'OpenDyslexic', 'OpenDyslexicAlta', 'Comic Sans MS', sans-serif !important;
+  word-spacing: 0.12em !important;
+  letter-spacing: 0.03em !important;
+}
+
+body.access-dyslexia .material-symbols-outlined,
+body.access-dyslexia [class*='material-symbols'] {
+  font-family: 'Material Symbols Outlined' !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
+}
+
+
 /* 7. Reduce Motion (Kurangi Gerakan) */
-body.access-reduce-motion *, 
-body.access-reduce-motion *::before, 
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body.access-reduce-motion *,
+body.access-reduce-motion *::before,
 body.access-reduce-motion *::after {
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
@@ -140,27 +223,39 @@ body.access-reduce-motion *::after {
 
 /* 8. Highlight Links (Sorot Tautan) */
 body.access-highlight-links a {
-  background-color: #ffff00 !important;
-  color: #000000 !important;
+  background-color: #FFB39F !important;
+  color: #0B0B0B !important;
   text-decoration: underline !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
+  padding: 0 4px !important;
+  border-radius: 2px !important;
 }
 
 /* 9. Enhanced Focus (Fokus Diperjelas) */
-body.access-focus *:focus {
-  outline: 4px solid #ffb59f !important;
-  outline-offset: 2px !important;
+body.access-focus *:focus,
+body.access-focus *:focus-visible {
+  outline: 3px solid #FFB39F !important;
+  outline-offset: 3px !important;
 }
 
-/* 10. Cursor Besar (Large Cursor) */
+/* 10. Cursor Besar */
 body.access-cursor-large,
 body.access-cursor-large * {
-  cursor: zoom-in !important;
+  cursor: crosshair !important;
 }
-/* 1. Ukuran Teks Responsif */
-body.access-text-sm {
-  font-size: 90% !important;
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-body.access-text-lg {
-  font-size: 115% !important;
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
